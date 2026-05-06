@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerPath - Data-Driven Career Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Playfair+Display:wght@700;900&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #0a0e27;
+            --secondary: #1a1f3a;
+            --accent: #00d4aa;
+            --accent-dim: #00d4aa33;
+            --text: #e8eaf0;
+            --text-dim: #8b92b2;
+            --border: #2a3052;
+            --card-bg: #13172e;
+            --metric-high: #00ffc6;
+            --metric-mid: #ffd93d;
+            --metric-low: #ff6b9d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .background-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 212, 170, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 107, 157, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--accent);
+            letter-spacing: -0.5px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+        }
+
+        .nav a {
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: color 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav a:hover {
+            color: var(--accent);
+        }
+
+        .hero {
+            padding: 4rem 0 3rem;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin-bottom: 2rem;
+        }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin: 3rem 0;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 212, 170, 0.1);
+        }
+
+        .stat-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--accent);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.5rem;
+        }
+
+        .career-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(650px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .career-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeInUp 0.8s ease-out backwards;
+        }
+
+        .career-card:nth-child(1) { animation-delay: 0.5s; }
+        .career-card:nth-child(2) { animation-delay: 0.6s; }
+        .career-card:nth-child(3) { animation-delay: 0.7s; }
+        .career-card:nth-child(4) { animation-delay: 0.8s; }
+
+        .career-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 32px rgba(0, 212, 170, 0.15);
+            border-color: var(--accent);
+        }
+
+        .career-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .career-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .career-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: var(--accent-dim);
+            color: var(--accent);
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .metric {
+            background: var(--secondary);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .metric-subtext {
+            font-size: 0.875rem;
+            color: var(--text-dim);
+            margin-top: 0.25rem;
+        }
+
+        .chart-container {
+            margin: 1.5rem 0;
+            background: var(--secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .chart-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .requirements {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .requirements-title {
+            font-size: 0.875rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .requirement-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .requirement-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            padding: 0.5rem 0.875rem;
+            background: var(--primary);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+
+        .exit-opportunities {
+            margin-top: 1.5rem;
+        }
+
+        .exit-opp-title {
+            font-size: 0.875rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.75rem;
+        }
+
+        .exit-opp-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .exit-opp-item {
+            font-size: 0.875rem;
+            color: var(--text);
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .exit-opp-item::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .success-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--metric-low), var(--metric-mid), var(--metric-high));
+            border-radius: 4px;
+            transition: width 1s ease-out;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .career-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Coaching Section Styles */
+        .careers-section {
+            display: none;
+        }
+
+        .careers-section.active {
+            display: block;
+        }
+
+        .coaching-section {
+            display: none;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .coaching-section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+            max-width: 600px;
+        }
+
+        .coaches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .coach-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2.5rem;
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .coach-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--metric-mid));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .coach-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 32px rgba(0, 212, 170, 0.15);
+            border-color: var(--accent);
+        }
+
+        .coach-card:hover::before {
+            opacity: 1;
+        }
+
+        .coach-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--metric-mid));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .coach-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .coach-role {
+            font-size: 1rem;
+            color: var(--text-dim);
+            margin-bottom: 0.25rem;
+        }
+
+        .coach-company {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .coach-stats {
+            display: flex;
+            gap: 2rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .coach-stat {
+            flex: 1;
+        }
+
+        .coach-stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent);
+            display: block;
+        }
+
+        .coach-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.25rem;
+        }
+
+        .coach-specialties {
+            margin: 1.5rem 0;
+        }
+
+        .specialties-title {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.75rem;
+        }
+
+        .specialty-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .specialty-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            padding: 0.5rem 0.875rem;
+            background: var(--secondary);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+        }
+
+        .booking-info {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .price {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .price span {
+            font-size: 0.875rem;
+            color: var(--text-dim);
+            font-weight: 400;
+        }
+
+        .book-button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--accent);
+            color: var(--primary);
+            border: none;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .book-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 212, 170, 0.3);
+        }
+
+        .book-button:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="background-pattern"></div>
+    
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="logo">CareerPath</div>
+                <nav class="nav">
+                    <a href="#careers">Careers</a>
+                    <a href="#data">Data</a>
+                    <a href="#match">Match Me</a>
+                    <a href="#insights">Insights</a>
+                    <a href="#coaching">Coaching</a>
+                </nav>
+            </div>
+        </header>
+
+        <section class="hero">
+            <h1>Data-Driven<br>Career Intelligence</h1>
+            <p class="hero-description">
+                Real salary data, hiring statistics, and career trajectory insights to help you make smarter decisions about your future.
+            </p>
+        </section>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-number">250K+</span>
+                <span class="stat-label">Data Points</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">500+</span>
+                <span class="stat-label">Career Paths</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">95%</span>
+                <span class="stat-label">Match Accuracy</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">50K+</span>
+                <span class="stat-label">Students Guided</span>
+            </div>
+        </div>
+
+        <div id="careers-section" class="careers-section active">
+        <div class="career-grid">
+            <!-- Investment Banking Card -->
+            <div class="career-card">
+                <div class="career-header">
+                    <h2 class="career-title">Investment Banking</h2>
+                    <span class="career-tag">Finance</span>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric">
+                        <div class="metric-label">Starting Salary</div>
+                        <div class="metric-value">$110K</div>
+                        <div class="metric-subtext">+ $50K bonus avg.</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Entry Success Rate</div>
+                        <div class="metric-value">12%</div>
+                        <div class="metric-subtext">Highly competitive</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">Salary Progression (Years 0-5)</div>
+                    <canvas id="ibChart"></canvas>
+                </div>
+
+                <div class="exit-opportunities">
+                    <div class="exit-opp-title">Top Exit Opportunities</div>
+                    <div class="exit-opp-list">
+                        <div class="exit-opp-item">Private Equity (Avg. $180K after 2 yrs)</div>
+                        <div class="exit-opp-item">Hedge Funds (Avg. $200K after 2 yrs)</div>
+                        <div class="exit-opp-item">Corporate Development (Avg. $150K after 2 yrs)</div>
+                        <div class="exit-opp-item">Venture Capital (Avg. $160K after 3 yrs)</div>
+                    </div>
+                </div>
+
+                <div class="requirements">
+                    <div class="requirements-title">Required Qualifications</div>
+                    <div class="requirement-tags">
+                        <span class="requirement-tag">Top 20 University</span>
+                        <span class="requirement-tag">3.7+ GPA</span>
+                        <span class="requirement-tag">Finance/Econ Major</span>
+                        <span class="requirement-tag">Internship Experience</span>
+                        <span class="requirement-tag">Excel/Financial Modeling</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Management Consulting Card -->
+            <div class="career-card">
+                <div class="career-header">
+                    <h2 class="career-title">Management Consulting</h2>
+                    <span class="career-tag">Consulting</span>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric">
+                        <div class="metric-label">Starting Salary</div>
+                        <div class="metric-value">$95K</div>
+                        <div class="metric-subtext">+ $25K bonus avg.</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Entry Success Rate</div>
+                        <div class="metric-value">18%</div>
+                        <div class="metric-subtext">Very competitive</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">Salary Progression (Years 0-5)</div>
+                    <canvas id="mcChart"></canvas>
+                </div>
+
+                <div class="exit-opportunities">
+                    <div class="exit-opp-title">Top Exit Opportunities</div>
+                    <div class="exit-opp-list">
+                        <div class="exit-opp-item">Corporate Strategy (Avg. $140K after 2 yrs)</div>
+                        <div class="exit-opp-item">Tech Product Management (Avg. $160K after 2 yrs)</div>
+                        <div class="exit-opp-item">Startup Leadership (Avg. $130K + equity after 3 yrs)</div>
+                        <div class="exit-opp-item">Internal Consulting (Avg. $135K after 2 yrs)</div>
+                    </div>
+                </div>
+
+                <div class="requirements">
+                    <div class="requirements-title">Required Qualifications</div>
+                    <div class="requirement-tags">
+                        <span class="requirement-tag">Top 30 University</span>
+                        <span class="requirement-tag">3.5+ GPA</span>
+                        <span class="requirement-tag">Any Major (Analytical)</span>
+                        <span class="requirement-tag">Case Interview Prep</span>
+                        <span class="requirement-tag">Leadership Experience</span>
+                        <span class="requirement-tag">PowerPoint/Excel</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Analytics Card -->
+            <div class="career-card">
+                <div class="career-header">
+                    <h2 class="career-title">Data Analytics</h2>
+                    <span class="career-tag">Technology</span>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric">
+                        <div class="metric-label">Starting Salary</div>
+                        <div class="metric-value">$75K</div>
+                        <div class="metric-subtext">+ $10K bonus avg.</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Entry Success Rate</div>
+                        <div class="metric-value">35%</div>
+                        <div class="metric-subtext">Moderate competition</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">Salary Progression (Years 0-5)</div>
+                    <canvas id="daChart"></canvas>
+                </div>
+
+                <div class="exit-opportunities">
+                    <div class="exit-opp-title">Top Exit Opportunities</div>
+                    <div class="exit-opp-list">
+                        <div class="exit-opp-item">Data Science (Avg. $130K after 2 yrs)</div>
+                        <div class="exit-opp-item">Business Intelligence Lead (Avg. $110K after 3 yrs)</div>
+                        <div class="exit-opp-item">Product Analytics (Avg. $125K after 2 yrs)</div>
+                        <div class="exit-opp-item">Analytics Manager (Avg. $120K after 4 yrs)</div>
+                    </div>
+                </div>
+
+                <div class="requirements">
+                    <div class="requirements-title">Required Qualifications</div>
+                    <div class="requirement-tags">
+                        <span class="requirement-tag">Any Accredited University</span>
+                        <span class="requirement-tag">3.0+ GPA</span>
+                        <span class="requirement-tag">STEM/Business Major</span>
+                        <span class="requirement-tag">SQL Proficiency</span>
+                        <span class="requirement-tag">Python/R Basics</span>
+                        <span class="requirement-tag">Tableau/PowerBI</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Software Engineering Card -->
+            <div class="career-card">
+                <div class="career-header">
+                    <h2 class="career-title">Software Engineering</h2>
+                    <span class="career-tag">Technology</span>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric">
+                        <div class="metric-label">Starting Salary</div>
+                        <div class="metric-value">$105K</div>
+                        <div class="metric-subtext">+ $35K bonus/equity avg.</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Entry Success Rate</div>
+                        <div class="metric-value">28%</div>
+                        <div class="metric-subtext">Competitive</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">Salary Progression (Years 0-5)</div>
+                    <canvas id="seChart"></canvas>
+                </div>
+
+                <div class="exit-opportunities">
+                    <div class="exit-opp-title">Top Exit Opportunities</div>
+                    <div class="exit-opp-list">
+                        <div class="exit-opp-item">Senior Engineer (Avg. $180K after 4 yrs)</div>
+                        <div class="exit-opp-item">Tech Lead (Avg. $200K after 5 yrs)</div>
+                        <div class="exit-opp-item">Engineering Manager (Avg. $190K after 5 yrs)</div>
+                        <div class="exit-opp-item">Startup CTO (Avg. $150K + equity after 4 yrs)</div>
+                    </div>
+                </div>
+
+                <div class="requirements">
+                    <div class="requirements-title">Required Qualifications</div>
+                    <div class="requirement-tags">
+                        <span class="requirement-tag">CS/Engineering Degree</span>
+                        <span class="requirement-tag">3.2+ GPA</span>
+                        <span class="requirement-tag">Data Structures/Algorithms</span>
+                        <span class="requirement-tag">GitHub Portfolio</span>
+                        <span class="requirement-tag">Multiple Languages</span>
+                        <span class="requirement-tag">Internship Preferred</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Coaching Section -->
+        <div id="coaching-section" class="coaching-section">
+            <h2 class="section-title">Book a Coach</h2>
+            <p class="section-subtitle">Get personalized guidance from industry professionals who've been there. One-on-one sessions tailored to your career goals.</p>
+
+            <div class="coaches-grid">
+                <!-- Roberto Card -->
+                <div class="coach-card">
+                    <div class="coach-avatar">R</div>
+                    <h3 class="coach-name">Roberto</h3>
+                    <div class="coach-role">Software Engineer</div>
+                    <div class="coach-company">@ Bloomberg</div>
+
+                    <div class="coach-stats">
+                        <div class="coach-stat">
+                            <span class="coach-stat-value">4.9</span>
+                            <span class="coach-stat-label">Rating</span>
+                        </div>
+                        <div class="coach-stat">
+                            <span class="coach-stat-value">127</span>
+                            <span class="coach-stat-label">Sessions</span>
+                        </div>
+                        <div class="coach-stat">
+                            <span class="coach-stat-value">5+</span>
+                            <span class="coach-stat-label">Years Exp</span>
+                        </div>
+                    </div>
+
+                    <div class="coach-specialties">
+                        <div class="specialties-title">Specialties</div>
+                        <div class="specialty-tags">
+                            <span class="specialty-tag">Technical Interviews</span>
+                            <span class="specialty-tag">System Design</span>
+                            <span class="specialty-tag">Career Transitions</span>
+                            <span class="specialty-tag">Financial Tech</span>
+                            <span class="specialty-tag">Resume Review</span>
+                        </div>
+                    </div>
+
+                    <div class="booking-info">
+                        <div class="price">$120 <span>/ hour</span></div>
+                        <button class="book-button" onclick="bookCoach('Roberto')">Book Session</button>
+                    </div>
+                </div>
+
+                <!-- Monica Card -->
+                <div class="coach-card">
+                    <div class="coach-avatar">M</div>
+                    <h3 class="coach-name">Monica</h3>
+                    <div class="coach-role">Software Engineer</div>
+                    <div class="coach-company">@ Reddit</div>
+
+                    <div class="coach-stats">
+                        <div class="coach-stat">
+                            <span class="coach-stat-value">5.0</span>
+                            <span class="coach-stat-label">Rating</span>
+                        </div>
+                        <div class="coach-stat">
+                            <span class="coach-stat-value">93</span>
+                            <span class="coach-stat-label">Sessions</span>
+                        </div>
+                        <div class="coach-stat">
+                            <span class="coach-stat-value">4+</span>
+                            <span class="coach-stat-label">Years Exp</span>
+                        </div>
+                    </div>
+
+                    <div class="coach-specialties">
+                        <div class="specialties-title">Specialties</div>
+                        <div class="specialty-tags">
+                            <span class="specialty-tag">Backend Development</span>
+                            <span class="specialty-tag">Product Thinking</span>
+                            <span class="specialty-tag">Behavioral Interviews</span>
+                            <span class="specialty-tag">Social Platforms</span>
+                            <span class="specialty-tag">Career Growth</span>
+                        </div>
+                    </div>
+
+                    <div class="booking-info">
+                        <div class="price">$115 <span>/ hour</span></div>
+                        <button class="book-button" onclick="bookCoach('Monica')">Book Session</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Navigation handling
+        document.querySelectorAll('.nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = this.getAttribute('href').substring(1);
+                
+                // Hide all sections
+                document.getElementById('careers-section').classList.remove('active');
+                document.getElementById('coaching-section').classList.remove('active');
+                
+                // Show target section
+                if (target === 'coaching') {
+                    document.getElementById('coaching-section').classList.add('active');
+                } else {
+                    document.getElementById('careers-section').classList.add('active');
+                }
+
+                // Update hero content based on section
+                const heroTitle = document.querySelector('h1');
+                const heroDescription = document.querySelector('.hero-description');
+                
+                if (target === 'coaching') {
+                    heroTitle.innerHTML = 'Expert Career<br>Coaching';
+                    heroDescription.textContent = 'Connect with experienced professionals for personalized guidance on interviews, career transitions, and skill development.';
+                } else {
+                    heroTitle.innerHTML = 'Data-Driven<br>Career Intelligence';
+                    heroDescription.textContent = 'Real salary data, hiring statistics, and career trajectory insights to help you make smarter decisions about your future.';
+                }
+            });
+        });
+
+        // Booking function
+        function bookCoach(coachName) {
+            alert(`Booking session with ${coachName}! In a production app, this would open a calendar scheduling interface.`);
+        }
+
+        // Chart.js configuration
+        Chart.defaults.color = '#8b92b2';
+        Chart.defaults.borderColor = '#2a3052';
+        Chart.defaults.font.family = "'JetBrains Mono', monospace";
+        Chart.defaults.font.size = 11;
+
+        const chartConfig = {
+            type: 'line',
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 2,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: '#1a1f3a',
+                        titleColor: '#e8eaf0',
+                        bodyColor: '#8b92b2',
+                        borderColor: '#00d4aa',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                return '$' + context.parsed.y + 'K';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        grid: {
+                            color: '#2a3052'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value + 'K';
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: '#2a3052'
+                        }
+                    }
+                }
+            }
+        };
+
+        // Investment Banking Chart
+        new Chart(document.getElementById('ibChart'), {
+            ...chartConfig,
+            data: {
+                labels: ['Year 0', 'Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+                datasets: [{
+                    label: 'Total Compensation',
+                    data: [160, 180, 220, 260, 320, 400],
+                    borderColor: '#00d4aa',
+                    backgroundColor: 'rgba(0, 212, 170, 0.1)',
+                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#00d4aa',
+                    fill: true
+                }]
+            }
+        });
+
+        // Management Consulting Chart
+        new Chart(document.getElementById('mcChart'), {
+            ...chartConfig,
+            data: {
+                labels: ['Year 0', 'Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+                datasets: [{
+                    label: 'Total Compensation',
+                    data: [120, 135, 155, 180, 220, 270],
+                    borderColor: '#00d4aa',
+                    backgroundColor: 'rgba(0, 212, 170, 0.1)',
+                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#00d4aa',
+                    fill: true
+                }]
+            }
+        });
+
+        // Data Analytics Chart
+        new Chart(document.getElementById('daChart'), {
+            ...chartConfig,
+            data: {
+                labels: ['Year 0', 'Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+                datasets: [{
+                    label: 'Total Compensation',
+                    data: [85, 95, 105, 118, 135, 155],
+                    borderColor: '#00d4aa',
+                    backgroundColor: 'rgba(0, 212, 170, 0.1)',
+                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#00d4aa',
+                    fill: true
+                }]
+            }
+        });
+
+        // Software Engineering Chart
+        new Chart(document.getElementById('seChart'), {
+            ...chartConfig,
+            data: {
+                labels: ['Year 0', 'Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+                datasets: [{
+                    label: 'Total Compensation',
+                    data: [140, 155, 175, 200, 240, 290],
+                    borderColor: '#00d4aa',
+                    backgroundColor: 'rgba(0, 212, 170, 0.1)',
+                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#00d4aa',
+                    fill: true
+                }]
+            }
+        });
+    </script>
+</body>
+</html>
