@@ -1,1087 +1,920 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CareerPath - Data-Driven Career Intelligence</title>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Playfair+Display:wght@700;900&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        :root {
-            --primary: #0a0e27;
-            --secondary: #1a1f3a;
-            --accent: #00d4aa;
-            --accent-dim: #00d4aa33;
-            --text: #e8eaf0;
-            --text-dim: #8b92b2;
-            --border: #2a3052;
-            --card-bg: #13172e;
-            --metric-high: #00ffc6;
-            --metric-mid: #ffd93d;
-            --metric-low: #ff6b9d;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Work Sans', sans-serif;
-            background: var(--primary);
-            color: var(--text);
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        .background-pattern {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(0, 212, 170, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(255, 107, 157, 0.05) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        header {
-            padding: 2rem 0;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 3rem;
-            animation: fadeInDown 0.8s ease-out;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-weight: 900;
-            color: var(--accent);
-            letter-spacing: -0.5px;
-        }
-
-        .nav {
-            display: flex;
-            gap: 2rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.875rem;
-        }
-
-        .nav a {
-            color: var(--text-dim);
-            text-decoration: none;
-            transition: color 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .nav a:hover {
-            color: var(--accent);
-        }
-
-        .hero {
-            padding: 4rem 0 3rem;
-            animation: fadeInUp 0.8s ease-out 0.2s backwards;
-        }
-
-        h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 4rem;
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-description {
-            font-size: 1.25rem;
-            color: var(--text-dim);
-            max-width: 600px;
-            margin-bottom: 2rem;
-        }
-
-        .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            margin: 3rem 0;
-            animation: fadeInUp 0.8s ease-out 0.4s backwards;
-        }
-
-        .stat-item {
-            text-align: center;
-            padding: 1.5rem;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .stat-item:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 212, 170, 0.1);
-        }
-
-        .stat-number {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 2.5rem;
-            font-weight: 600;
-            color: var(--accent);
-            display: block;
-        }
-
-        .stat-label {
-            font-size: 0.875rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 0.5rem;
-        }
-
-        .career-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(650px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .career-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 2rem;
-            transition: transform 0.3s, box-shadow 0.3s;
-            animation: fadeInUp 0.8s ease-out backwards;
-        }
-
-        .career-card:nth-child(1) { animation-delay: 0.5s; }
-        .career-card:nth-child(2) { animation-delay: 0.6s; }
-        .career-card:nth-child(3) { animation-delay: 0.7s; }
-        .career-card:nth-child(4) { animation-delay: 0.8s; }
-
-        .career-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 32px rgba(0, 212, 170, 0.15);
-            border-color: var(--accent);
-        }
-
-        .career-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .career-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--text);
-        }
-
-        .career-tag {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            padding: 0.5rem 1rem;
-            background: var(--accent-dim);
-            color: var(--accent);
-            border-radius: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .metric {
-            background: var(--secondary);
-            padding: 1rem;
-            border-radius: 8px;
-            border-left: 3px solid var(--accent);
-        }
-
-        .metric-label {
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.5rem;
-        }
-
-        .metric-value {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        .metric-subtext {
-            font-size: 0.875rem;
-            color: var(--text-dim);
-            margin-top: 0.25rem;
-        }
-
-        .chart-container {
-            margin: 1.5rem 0;
-            background: var(--secondary);
-            padding: 1.5rem;
-            border-radius: 8px;
-        }
-
-        .chart-title {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.875rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 1rem;
-        }
-
-        .requirements {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border);
-        }
-
-        .requirements-title {
-            font-size: 0.875rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 1rem;
-        }
-
-        .requirement-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .requirement-tag {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            padding: 0.5rem 0.875rem;
-            background: var(--primary);
-            color: var(--text);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-        }
-
-        .exit-opportunities {
-            margin-top: 1.5rem;
-        }
-
-        .exit-opp-title {
-            font-size: 0.875rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.75rem;
-        }
-
-        .exit-opp-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .exit-opp-item {
-            font-size: 0.875rem;
-            color: var(--text);
-            padding-left: 1rem;
-            position: relative;
-        }
-
-        .exit-opp-item::before {
-            content: "→";
-            position: absolute;
-            left: 0;
-            color: var(--accent);
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .success-bar {
-            width: 100%;
-            height: 8px;
-            background: var(--secondary);
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 0.5rem;
-        }
-
-        .success-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--metric-low), var(--metric-mid), var(--metric-high));
-            border-radius: 4px;
-            transition: width 1s ease-out;
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-
-            .stats-bar {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .career-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .metrics-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Coaching Section Styles */
-        .careers-section {
-            display: none;
-        }
-
-        .careers-section.active {
-            display: block;
-        }
-
-        .coaching-section {
-            display: none;
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        .coaching-section.active {
-            display: block;
-        }
-
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 3rem;
-            font-weight: 900;
-            margin-bottom: 1rem;
-            color: var(--text);
-        }
-
-        .section-subtitle {
-            font-size: 1.125rem;
-            color: var(--text-dim);
-            margin-bottom: 3rem;
-            max-width: 600px;
-        }
-
-        .coaches-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 2rem;
-            margin-bottom: 4rem;
-        }
-
-        .coach-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 2.5rem;
-            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .coach-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--accent), var(--metric-mid));
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .coach-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 32px rgba(0, 212, 170, 0.15);
-            border-color: var(--accent);
-        }
-
-        .coach-card:hover::before {
-            opacity: 1;
-        }
-
-        .coach-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), var(--metric-mid));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-weight: 900;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-        }
-
-        .coach-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 0.5rem;
-        }
-
-        .coach-role {
-            font-size: 1rem;
-            color: var(--text-dim);
-            margin-bottom: 0.25rem;
-        }
-
-        .coach-company {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.875rem;
-            color: var(--accent);
-            margin-bottom: 1.5rem;
-        }
-
-        .coach-stats {
-            display: flex;
-            gap: 2rem;
-            margin: 1.5rem 0;
-            padding: 1.5rem 0;
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .coach-stat {
-            flex: 1;
-        }
-
-        .coach-stat-value {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--accent);
-            display: block;
-        }
-
-        .coach-stat-label {
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 0.25rem;
-        }
-
-        .coach-specialties {
-            margin: 1.5rem 0;
-        }
-
-        .specialties-title {
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.75rem;
-        }
-
-        .specialty-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .specialty-tag {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            padding: 0.5rem 0.875rem;
-            background: var(--secondary);
-            color: var(--text);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-        }
-
-        .booking-info {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border);
-        }
-
-        .price {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 1rem;
-        }
-
-        .price span {
-            font-size: 0.875rem;
-            color: var(--text-dim);
-            font-weight: 400;
-        }
-
-        .book-button {
-            width: 100%;
-            padding: 1rem;
-            background: var(--accent);
-            color: var(--primary);
-            border: none;
-            border-radius: 8px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.875rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .book-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(0, 212, 170, 0.3);
-        }
-
-        .book-button:active {
-            transform: translateY(0);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DreamForce — Career Accelerator</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #fafafa;
+    --bg-alt: #f3f3f3;
+    --surface: #ffffff;
+    --text: #1a1a1a;
+    --text-secondary: #6b6b6b;
+    --text-tertiary: #999;
+    --accent: #2a2a2a;
+    --accent-light: #e8e8e8;
+    --border: #e5e5e5;
+    --border-light: #f0f0f0;
+    --radius: 16px;
+    --radius-sm: 10px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.06);
+    --shadow-lg: 0 10px 40px rgba(0,0,0,0.08);
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(250,250,250,0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-light);
+    transition: var(--transition);
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto;
+    padding: 0 40px; height: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 600;
+    letter-spacing: -0.02em; color: var(--text);
+    cursor: pointer; text-decoration: none;
+  }
+  .logo span { font-weight: 400; color: var(--text-secondary); }
+  .nav-links { display: flex; gap: 32px; align-items: center; }
+  .nav-links a {
+    font-size: 0.875rem; color: var(--text-secondary);
+    text-decoration: none; font-weight: 400;
+    transition: color var(--transition);
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta {
+    padding: 10px 24px !important; background: var(--accent) !important;
+    color: #fff !important; border-radius: 100px;
+    font-weight: 500 !important; font-size: 0.85rem !important;
+    transition: all var(--transition) !important;
+  }
+  .nav-cta:hover { background: #444 !important; transform: translateY(-1px); }
+
+  /* ── PAGE SYSTEM ── */
+  .page { display: none; min-height: 100vh; }
+  .page.active { display: block; }
+
+  /* ── HERO (SELECTOR) ── */
+  .hero {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 120px 40px 80px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: -200px; right: -200px;
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,0,0,0.02) 0%, transparent 70%);
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 20px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 100px;
+    font-size: 0.8rem; color: var(--text-secondary);
+    margin-bottom: 40px; font-weight: 500;
+  }
+  .hero-badge .dot {
+    width: 6px; height: 6px; background: #4ade80;
+    border-radius: 50%; animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    font-weight: 600; line-height: 1.1;
+    letter-spacing: -0.03em; margin-bottom: 24px;
+    max-width: 700px;
+  }
+  .hero p {
+    font-size: 1.15rem; color: var(--text-secondary);
+    max-width: 520px; margin-bottom: 64px;
+    line-height: 1.7; font-weight: 300;
+  }
+
+  .selector-label {
+    font-size: 0.75rem; text-transform: uppercase;
+    letter-spacing: 0.15em; color: var(--text-tertiary);
+    margin-bottom: 24px; font-weight: 500;
+  }
+
+  .role-cards {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 24px; max-width: 680px; width: 100%;
+  }
+  .role-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 48px 36px;
+    cursor: pointer; transition: all var(--transition);
+    text-align: left; position: relative; overflow: hidden;
+  }
+  .role-card:hover {
+    border-color: var(--accent); box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+  }
+  .role-card .icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: var(--bg-alt); display: flex;
+    align-items: center; justify-content: center;
+    margin-bottom: 24px; font-size: 1.3rem;
+  }
+  .role-card h3 {
+    font-size: 1.2rem; font-weight: 600;
+    margin-bottom: 8px; letter-spacing: -0.01em;
+  }
+  .role-card p {
+    font-size: 0.875rem; color: var(--text-secondary);
+    line-height: 1.6; margin-bottom: 24px;
+  }
+  .role-card .arrow {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.8rem; font-weight: 500;
+    color: var(--text-tertiary); transition: all var(--transition);
+  }
+  .role-card:hover .arrow { color: var(--text); gap: 10px; }
+
+  /* ── SHARED SECTION STYLES ── */
+  section { padding: 120px 40px; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-tag {
+    font-size: 0.7rem; text-transform: uppercase;
+    letter-spacing: 0.18em; color: var(--text-tertiary);
+    font-weight: 500; margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 600; line-height: 1.15;
+    letter-spacing: -0.025em; margin-bottom: 20px;
+    max-width: 600px;
+  }
+  .section-desc {
+    font-size: 1.05rem; color: var(--text-secondary);
+    max-width: 500px; line-height: 1.7; font-weight: 300;
+    margin-bottom: 60px;
+  }
+
+  /* ── FEATURE GRID ── */
+  .features-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .feature-card {
+    background: var(--surface); border: 1px solid var(--border-light);
+    border-radius: var(--radius); padding: 40px 32px;
+    transition: all var(--transition);
+  }
+  .feature-card:hover {
+    border-color: var(--border); box-shadow: var(--shadow-sm);
+  }
+  .feature-icon {
+    width: 44px; height: 44px; border-radius: 11px;
+    background: var(--bg-alt); display: flex;
+    align-items: center; justify-content: center;
+    margin-bottom: 24px; font-size: 1.15rem;
+  }
+  .feature-card h4 {
+    font-size: 1rem; font-weight: 600;
+    margin-bottom: 10px; letter-spacing: -0.01em;
+  }
+  .feature-card p {
+    font-size: 0.875rem; color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  /* ── QUIZ SECTION ── */
+  .quiz-section { background: var(--surface); }
+  .quiz-layout {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center;
+  }
+  .quiz-preview {
+    background: var(--bg); border: 1px solid var(--border-light);
+    border-radius: var(--radius); padding: 40px;
+    position: relative;
+  }
+  .quiz-preview-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 32px;
+  }
+  .quiz-preview-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent);
+  }
+  .quiz-preview-label {
+    font-size: 0.75rem; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--text-tertiary);
+    font-weight: 500;
+  }
+  .quiz-item {
+    padding: 16px 20px; background: var(--surface);
+    border: 1px solid var(--border-light); border-radius: var(--radius-sm);
+    margin-bottom: 12px; font-size: 0.875rem;
+    color: var(--text-secondary); transition: all var(--transition);
+    cursor: pointer;
+  }
+  .quiz-item:hover { border-color: var(--accent); color: var(--text); }
+  .quiz-item.selected {
+    border-color: var(--accent); background: var(--accent);
+    color: #fff;
+  }
+  .quiz-progress {
+    margin-top: 24px; height: 3px; background: var(--border-light);
+    border-radius: 100px; overflow: hidden;
+  }
+  .quiz-progress-bar {
+    height: 100%; width: 35%; background: var(--accent);
+    border-radius: 100px; transition: width 0.6s ease;
+  }
+
+  /* ── CAREERS SECTION ── */
+  .careers-scroll {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .career-chip {
+    padding: 20px 24px; background: var(--surface);
+    border: 1px solid var(--border-light); border-radius: var(--radius-sm);
+    transition: all var(--transition); cursor: default;
+  }
+  .career-chip:hover {
+    border-color: var(--border); transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+  }
+  .career-chip h5 {
+    font-size: 0.9rem; font-weight: 600; margin-bottom: 4px;
+  }
+  .career-chip .salary {
+    font-size: 0.78rem; color: var(--text-tertiary); font-weight: 400;
+  }
+
+  /* ── COACHING SECTION ── */
+  .coaching-cards {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .coach-card {
+    background: var(--surface); border: 1px solid var(--border-light);
+    border-radius: var(--radius); padding: 36px 28px;
+    text-align: center; transition: all var(--transition);
+  }
+  .coach-card:hover {
+    border-color: var(--border); box-shadow: var(--shadow-sm);
+  }
+  .coach-avatar {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: var(--bg-alt); margin: 0 auto 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; color: var(--text-secondary);
+  }
+  .coach-card h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; }
+  .coach-card .role {
+    font-size: 0.78rem; color: var(--text-tertiary);
+    margin-bottom: 16px;
+  }
+  .coach-card p {
+    font-size: 0.83rem; color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; background: var(--border-light);
+    border: 1px solid var(--border-light); border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .stat-item {
+    background: var(--surface); padding: 40px 32px;
+    text-align: center;
+  }
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem; font-weight: 600;
+    letter-spacing: -0.03em; margin-bottom: 6px;
+  }
+  .stat-label {
+    font-size: 0.78rem; color: var(--text-tertiary);
+    font-weight: 400;
+  }
+
+  /* ── CTA SECTION ── */
+  .cta-section {
+    text-align: center;
+    padding: 100px 40px;
+  }
+  .cta-section .section-title { margin: 0 auto 20px; }
+  .cta-section .section-desc { margin: 0 auto 48px; }
+  .cta-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 16px 40px; background: var(--accent);
+    color: #fff; border: none; border-radius: 100px;
+    font-size: 0.95rem; font-weight: 500; cursor: pointer;
+    transition: all var(--transition); font-family: inherit;
+    text-decoration: none;
+  }
+  .cta-btn:hover { background: #444; transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .cta-btn-outline {
+    background: transparent; color: var(--text);
+    border: 1px solid var(--border); margin-left: 12px;
+  }
+  .cta-btn-outline:hover {
+    background: var(--accent); color: #fff;
+    border-color: var(--accent);
+  }
+
+  /* ── TESTIMONIAL ── */
+  .testimonial-section { background: var(--surface); }
+  .testimonial-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  .testimonial-card {
+    background: var(--bg); border-radius: var(--radius);
+    padding: 40px; border: 1px solid var(--border-light);
+  }
+  .testimonial-card blockquote {
+    font-size: 1rem; line-height: 1.7;
+    color: var(--text); margin-bottom: 24px;
+    font-weight: 300; font-style: italic;
+  }
+  .testimonial-author {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .testimonial-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--accent-light); display: flex;
+    align-items: center; justify-content: center;
+    font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);
+  }
+  .testimonial-name { font-size: 0.85rem; font-weight: 600; }
+  .testimonial-role { font-size: 0.78rem; color: var(--text-tertiary); }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 60px 40px; border-top: 1px solid var(--border-light);
+  }
+  .footer-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-left .logo { margin-bottom: 8px; display: block; }
+  .footer-left p { font-size: 0.8rem; color: var(--text-tertiary); }
+  .footer-links { display: flex; gap: 28px; }
+  .footer-links a {
+    font-size: 0.8rem; color: var(--text-tertiary);
+    text-decoration: none; transition: color var(--transition);
+  }
+  .footer-links a:hover { color: var(--text); }
+
+  /* ── BACK BUTTON ── */
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.8rem; color: var(--text-tertiary);
+    cursor: pointer; background: none; border: none;
+    font-family: inherit; padding: 0; margin-bottom: 48px;
+    transition: all var(--transition);
+  }
+  .back-btn:hover { color: var(--text); gap: 4px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .role-cards { grid-template-columns: 1fr; max-width: 400px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .quiz-layout { grid-template-columns: 1fr; gap: 48px; }
+    .careers-scroll { grid-template-columns: repeat(2, 1fr); }
+    .coaching-cards { grid-template-columns: 1fr; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .testimonial-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    section { padding: 80px 24px; }
+    .hero { padding: 120px 24px 80px; }
+  }
+
+  @media (max-width: 600px) {
+    .careers-scroll { grid-template-columns: 1fr; }
+    .stats-bar { grid-template-columns: 1fr; }
+    .footer-inner { flex-direction: column; gap: 24px; text-align: center; }
+  }
+
+  /* ── FADE IN ── */
+  .fade-in {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+</style>
 </head>
 <body>
-    <div class="background-pattern"></div>
-    
-    <div class="container">
-        <header>
-            <div class="header-content">
-                <div class="logo">CareerPath</div>
-                <nav class="nav">
-                    <a href="#careers">Careers</a>
-                    <a href="#data">Data</a>
-                    <a href="#match">Match Me</a>
-                    <a href="#insights">Insights</a>
-                    <a href="#coaching">Coaching</a>
-                </nav>
-            </div>
-        </header>
 
-        <section class="hero">
-            <h1>Data-Driven<br>Career Intelligence</h1>
-            <p class="hero-description">
-                Real salary data, hiring statistics, and career trajectory insights to help you make smarter decisions about your future.
-            </p>
-        </section>
-
-        <div class="stats-bar">
-            <div class="stat-item">
-                <span class="stat-number">250K+</span>
-                <span class="stat-label">Data Points</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number">500+</span>
-                <span class="stat-label">Career Paths</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number">95%</span>
-                <span class="stat-label">Match Accuracy</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number">50K+</span>
-                <span class="stat-label">Students Guided</span>
-            </div>
-        </div>
-
-        <div id="careers-section" class="careers-section active">
-        <div class="career-grid">
-            <!-- Investment Banking Card -->
-            <div class="career-card">
-                <div class="career-header">
-                    <h2 class="career-title">Investment Banking</h2>
-                    <span class="career-tag">Finance</span>
-                </div>
-
-                <div class="metrics-grid">
-                    <div class="metric">
-                        <div class="metric-label">Starting Salary</div>
-                        <div class="metric-value">$110K</div>
-                        <div class="metric-subtext">+ $50K bonus avg.</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-label">Entry Success Rate</div>
-                        <div class="metric-value">12%</div>
-                        <div class="metric-subtext">Highly competitive</div>
-                    </div>
-                </div>
-
-                <div class="chart-container">
-                    <div class="chart-title">Salary Progression (Years 0-5)</div>
-                    <canvas id="ibChart"></canvas>
-                </div>
-
-                <div class="exit-opportunities">
-                    <div class="exit-opp-title">Top Exit Opportunities</div>
-                    <div class="exit-opp-list">
-                        <div class="exit-opp-item">Private Equity (Avg. $180K after 2 yrs)</div>
-                        <div class="exit-opp-item">Hedge Funds (Avg. $200K after 2 yrs)</div>
-                        <div class="exit-opp-item">Corporate Development (Avg. $150K after 2 yrs)</div>
-                        <div class="exit-opp-item">Venture Capital (Avg. $160K after 3 yrs)</div>
-                    </div>
-                </div>
-
-                <div class="requirements">
-                    <div class="requirements-title">Required Qualifications</div>
-                    <div class="requirement-tags">
-                        <span class="requirement-tag">Top 20 University</span>
-                        <span class="requirement-tag">3.7+ GPA</span>
-                        <span class="requirement-tag">Finance/Econ Major</span>
-                        <span class="requirement-tag">Internship Experience</span>
-                        <span class="requirement-tag">Excel/Financial Modeling</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Management Consulting Card -->
-            <div class="career-card">
-                <div class="career-header">
-                    <h2 class="career-title">Management Consulting</h2>
-                    <span class="career-tag">Consulting</span>
-                </div>
-
-                <div class="metrics-grid">
-                    <div class="metric">
-                        <div class="metric-label">Starting Salary</div>
-                        <div class="metric-value">$95K</div>
-                        <div class="metric-subtext">+ $25K bonus avg.</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-label">Entry Success Rate</div>
-                        <div class="metric-value">18%</div>
-                        <div class="metric-subtext">Very competitive</div>
-                    </div>
-                </div>
-
-                <div class="chart-container">
-                    <div class="chart-title">Salary Progression (Years 0-5)</div>
-                    <canvas id="mcChart"></canvas>
-                </div>
-
-                <div class="exit-opportunities">
-                    <div class="exit-opp-title">Top Exit Opportunities</div>
-                    <div class="exit-opp-list">
-                        <div class="exit-opp-item">Corporate Strategy (Avg. $140K after 2 yrs)</div>
-                        <div class="exit-opp-item">Tech Product Management (Avg. $160K after 2 yrs)</div>
-                        <div class="exit-opp-item">Startup Leadership (Avg. $130K + equity after 3 yrs)</div>
-                        <div class="exit-opp-item">Internal Consulting (Avg. $135K after 2 yrs)</div>
-                    </div>
-                </div>
-
-                <div class="requirements">
-                    <div class="requirements-title">Required Qualifications</div>
-                    <div class="requirement-tags">
-                        <span class="requirement-tag">Top 30 University</span>
-                        <span class="requirement-tag">3.5+ GPA</span>
-                        <span class="requirement-tag">Any Major (Analytical)</span>
-                        <span class="requirement-tag">Case Interview Prep</span>
-                        <span class="requirement-tag">Leadership Experience</span>
-                        <span class="requirement-tag">PowerPoint/Excel</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Data Analytics Card -->
-            <div class="career-card">
-                <div class="career-header">
-                    <h2 class="career-title">Data Analytics</h2>
-                    <span class="career-tag">Technology</span>
-                </div>
-
-                <div class="metrics-grid">
-                    <div class="metric">
-                        <div class="metric-label">Starting Salary</div>
-                        <div class="metric-value">$75K</div>
-                        <div class="metric-subtext">+ $10K bonus avg.</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-label">Entry Success Rate</div>
-                        <div class="metric-value">35%</div>
-                        <div class="metric-subtext">Moderate competition</div>
-                    </div>
-                </div>
-
-                <div class="chart-container">
-                    <div class="chart-title">Salary Progression (Years 0-5)</div>
-                    <canvas id="daChart"></canvas>
-                </div>
-
-                <div class="exit-opportunities">
-                    <div class="exit-opp-title">Top Exit Opportunities</div>
-                    <div class="exit-opp-list">
-                        <div class="exit-opp-item">Data Science (Avg. $130K after 2 yrs)</div>
-                        <div class="exit-opp-item">Business Intelligence Lead (Avg. $110K after 3 yrs)</div>
-                        <div class="exit-opp-item">Product Analytics (Avg. $125K after 2 yrs)</div>
-                        <div class="exit-opp-item">Analytics Manager (Avg. $120K after 4 yrs)</div>
-                    </div>
-                </div>
-
-                <div class="requirements">
-                    <div class="requirements-title">Required Qualifications</div>
-                    <div class="requirement-tags">
-                        <span class="requirement-tag">Any Accredited University</span>
-                        <span class="requirement-tag">3.0+ GPA</span>
-                        <span class="requirement-tag">STEM/Business Major</span>
-                        <span class="requirement-tag">SQL Proficiency</span>
-                        <span class="requirement-tag">Python/R Basics</span>
-                        <span class="requirement-tag">Tableau/PowerBI</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Software Engineering Card -->
-            <div class="career-card">
-                <div class="career-header">
-                    <h2 class="career-title">Software Engineering</h2>
-                    <span class="career-tag">Technology</span>
-                </div>
-
-                <div class="metrics-grid">
-                    <div class="metric">
-                        <div class="metric-label">Starting Salary</div>
-                        <div class="metric-value">$105K</div>
-                        <div class="metric-subtext">+ $35K bonus/equity avg.</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-label">Entry Success Rate</div>
-                        <div class="metric-value">28%</div>
-                        <div class="metric-subtext">Competitive</div>
-                    </div>
-                </div>
-
-                <div class="chart-container">
-                    <div class="chart-title">Salary Progression (Years 0-5)</div>
-                    <canvas id="seChart"></canvas>
-                </div>
-
-                <div class="exit-opportunities">
-                    <div class="exit-opp-title">Top Exit Opportunities</div>
-                    <div class="exit-opp-list">
-                        <div class="exit-opp-item">Senior Engineer (Avg. $180K after 4 yrs)</div>
-                        <div class="exit-opp-item">Tech Lead (Avg. $200K after 5 yrs)</div>
-                        <div class="exit-opp-item">Engineering Manager (Avg. $190K after 5 yrs)</div>
-                        <div class="exit-opp-item">Startup CTO (Avg. $150K + equity after 4 yrs)</div>
-                    </div>
-                </div>
-
-                <div class="requirements">
-                    <div class="requirements-title">Required Qualifications</div>
-                    <div class="requirement-tags">
-                        <span class="requirement-tag">CS/Engineering Degree</span>
-                        <span class="requirement-tag">3.2+ GPA</span>
-                        <span class="requirement-tag">Data Structures/Algorithms</span>
-                        <span class="requirement-tag">GitHub Portfolio</span>
-                        <span class="requirement-tag">Multiple Languages</span>
-                        <span class="requirement-tag">Internship Preferred</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
-
-        <!-- Coaching Section -->
-        <div id="coaching-section" class="coaching-section">
-            <h2 class="section-title">Book a Coach</h2>
-            <p class="section-subtitle">Get personalized guidance from industry professionals who've been there. One-on-one sessions tailored to your career goals.</p>
-
-            <div class="coaches-grid">
-                <!-- Roberto Card -->
-                <div class="coach-card">
-                    <div class="coach-avatar">R</div>
-                    <h3 class="coach-name">Roberto</h3>
-                    <div class="coach-role">Software Engineer</div>
-                    <div class="coach-company">@ Bloomberg</div>
-
-                    <div class="coach-stats">
-                        <div class="coach-stat">
-                            <span class="coach-stat-value">4.9</span>
-                            <span class="coach-stat-label">Rating</span>
-                        </div>
-                        <div class="coach-stat">
-                            <span class="coach-stat-value">127</span>
-                            <span class="coach-stat-label">Sessions</span>
-                        </div>
-                        <div class="coach-stat">
-                            <span class="coach-stat-value">5+</span>
-                            <span class="coach-stat-label">Years Exp</span>
-                        </div>
-                    </div>
-
-                    <div class="coach-specialties">
-                        <div class="specialties-title">Specialties</div>
-                        <div class="specialty-tags">
-                            <span class="specialty-tag">Technical Interviews</span>
-                            <span class="specialty-tag">System Design</span>
-                            <span class="specialty-tag">Career Transitions</span>
-                            <span class="specialty-tag">Financial Tech</span>
-                            <span class="specialty-tag">Resume Review</span>
-                        </div>
-                    </div>
-
-                    <div class="booking-info">
-                        <div class="price">$120 <span>/ hour</span></div>
-                        <button class="book-button" onclick="bookCoach('Roberto')">Book Session</button>
-                    </div>
-                </div>
-
-                <!-- Monica Card -->
-                <div class="coach-card">
-                    <div class="coach-avatar">M</div>
-                    <h3 class="coach-name">Monica</h3>
-                    <div class="coach-role">Software Engineer</div>
-                    <div class="coach-company">@ Reddit</div>
-
-                    <div class="coach-stats">
-                        <div class="coach-stat">
-                            <span class="coach-stat-value">5.0</span>
-                            <span class="coach-stat-label">Rating</span>
-                        </div>
-                        <div class="coach-stat">
-                            <span class="coach-stat-value">93</span>
-                            <span class="coach-stat-label">Sessions</span>
-                        </div>
-                        <div class="coach-stat">
-                            <span class="coach-stat-value">4+</span>
-                            <span class="coach-stat-label">Years Exp</span>
-                        </div>
-                    </div>
-
-                    <div class="coach-specialties">
-                        <div class="specialties-title">Specialties</div>
-                        <div class="specialty-tags">
-                            <span class="specialty-tag">Backend Development</span>
-                            <span class="specialty-tag">Product Thinking</span>
-                            <span class="specialty-tag">Behavioral Interviews</span>
-                            <span class="specialty-tag">Social Platforms</span>
-                            <span class="specialty-tag">Career Growth</span>
-                        </div>
-                    </div>
-
-                    <div class="booking-info">
-                        <div class="price">$115 <span>/ hour</span></div>
-                        <button class="book-button" onclick="bookCoach('Monica')">Book Session</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav>
+  <div class="nav-inner">
+    <a class="logo" onclick="showPage('home')">Dream<span>Force</span></a>
+    <div class="nav-links">
+      <a href="#" onclick="showPage('home')">Home</a>
+      <a href="#" onclick="showPage('students')">For Students</a>
+      <a href="#" onclick="showPage('educators')">For Career Centers</a>
+      <a class="nav-cta" href="#" onclick="showPage('home')">Get Started</a>
     </div>
+  </div>
+</nav>
 
-    <script>
-        // Navigation handling
-        document.querySelectorAll('.nav a').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = this.getAttribute('href').substring(1);
-                
-                // Hide all sections
-                document.getElementById('careers-section').classList.remove('active');
-                document.getElementById('coaching-section').classList.remove('active');
-                
-                // Show target section
-                if (target === 'coaching') {
-                    document.getElementById('coaching-section').classList.add('active');
-                } else {
-                    document.getElementById('careers-section').classList.add('active');
-                }
+<!-- ═══════════════ HOME PAGE ═══════════════ -->
+<div id="page-home" class="page active">
 
-                // Update hero content based on section
-                const heroTitle = document.querySelector('h1');
-                const heroDescription = document.querySelector('.hero-description');
-                
-                if (target === 'coaching') {
-                    heroTitle.innerHTML = 'Expert Career<br>Coaching';
-                    heroDescription.textContent = 'Connect with experienced professionals for personalized guidance on interviews, career transitions, and skill development.';
-                } else {
-                    heroTitle.innerHTML = 'Data-Driven<br>Career Intelligence';
-                    heroDescription.textContent = 'Real salary data, hiring statistics, and career trajectory insights to help you make smarter decisions about your future.';
-                }
-            });
-        });
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Now accepting early partners
+    </div>
+    <h1>Your career, clarified.</h1>
+    <p>DreamForce helps students discover their ideal career path and gives career centers the AI-powered tools to guide them there.</p>
 
-        // Booking function
-        function bookCoach(coachName) {
-            alert(`Booking session with ${coachName}! In a production app, this would open a calendar scheduling interface.`);
+    <div class="selector-label">I am a...</div>
+    <div class="role-cards">
+      <div class="role-card" onclick="showPage('students')">
+        <div class="icon">🎓</div>
+        <h3>Student</h3>
+        <p>Discover the career that fits your strengths, interests, and ambitions.</p>
+        <span class="arrow">Explore → </span>
+      </div>
+      <div class="role-card" onclick="showPage('educators')">
+        <div class="icon">🏛</div>
+        <h3>Career Center</h3>
+        <p>Equip your students with AI-driven career guidance at scale.</p>
+        <span class="arrow">Learn more →</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section style="padding-top: 0;">
+    <div class="section-inner">
+      <div class="stats-bar fade-in">
+        <div class="stat-item">
+          <div class="stat-number">50+</div>
+          <div class="stat-label">Career guides</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">12k</div>
+          <div class="stat-label">Students guided</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">94%</div>
+          <div class="stat-label">Satisfaction rate</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">200+</div>
+          <div class="stat-label">Expert coaches</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════ STUDENTS PAGE ═══════════════ -->
+<div id="page-students" class="page">
+
+  <!-- Hero -->
+  <section class="hero" style="min-height: auto; padding-top: 140px; padding-bottom: 80px;">
+    <button class="back-btn" onclick="showPage('home')">← Back</button>
+    <h1 style="font-size: clamp(2.4rem, 5vw, 3.5rem);">Find the career you were made for.</h1>
+    <p>Stop guessing. Our AI-powered quiz, in-depth career guides, and 1-on-1 coaching with industry experts help you move forward with clarity and confidence.</p>
+    <a class="cta-btn" href="#">Take the Career Quiz</a>
+  </section>
+
+  <!-- AI Quiz Section -->
+  <section class="quiz-section">
+    <div class="section-inner">
+      <div class="quiz-layout">
+        <div>
+          <div class="section-tag fade-in">AI-Powered Career Quiz</div>
+          <h2 class="section-title fade-in">Discover what you're built for</h2>
+          <p class="section-desc fade-in">
+            Answer questions about your personality, skills, interests, and experiences. Our AI analyzes your unique profile against hundreds of career paths to surface the roles where you'll thrive.
+          </p>
+          <div class="features-grid" style="grid-template-columns: 1fr; gap: 12px;">
+            <div class="feature-card fade-in" style="padding: 24px 28px; display: flex; align-items: flex-start; gap: 16px;">
+              <div class="feature-icon" style="flex-shrink: 0; margin-bottom: 0;">🧠</div>
+              <div>
+                <h4>Personality & strengths</h4>
+                <p>Understand your working style, communication preferences, and natural talents.</p>
+              </div>
+            </div>
+            <div class="feature-card fade-in" style="padding: 24px 28px; display: flex; align-items: flex-start; gap: 16px;">
+              <div class="feature-icon" style="flex-shrink: 0; margin-bottom: 0;">📊</div>
+              <div>
+                <h4>Skills & experience match</h4>
+                <p>Your major, coursework, and any work experience are factored into recommendations.</p>
+              </div>
+            </div>
+            <div class="feature-card fade-in" style="padding: 24px 28px; display: flex; align-items: flex-start; gap: 16px;">
+              <div class="feature-icon" style="flex-shrink: 0; margin-bottom: 0;">🎯</div>
+              <div>
+                <h4>Top career matches</h4>
+                <p>Get a ranked list of careers with compatibility scores and growth potential.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="quiz-preview fade-in">
+          <div class="quiz-preview-header">
+            <div class="quiz-preview-dot"></div>
+            <div class="quiz-preview-label">Career Quiz Preview</div>
+          </div>
+          <div style="font-size: 0.9rem; font-weight: 500; margin-bottom: 16px;">Which environment sounds most appealing?</div>
+          <div class="quiz-item">Working independently on creative projects</div>
+          <div class="quiz-item selected">Collaborating with a team to solve problems</div>
+          <div class="quiz-item">Leading strategy and making big decisions</div>
+          <div class="quiz-item">Building systems and analyzing data</div>
+          <div class="quiz-progress"><div class="quiz-progress-bar"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Career Guides -->
+  <section>
+    <div class="section-inner">
+      <div class="section-tag fade-in">Career Guides</div>
+      <h2 class="section-title fade-in">Deep-dive into the careers that interest you</h2>
+      <p class="section-desc fade-in">
+        Comprehensive guides covering day-to-day responsibilities, required skills, salary ranges, growth trajectories, and how to break in.
+      </p>
+      <div class="careers-scroll fade-in">
+        <div class="career-chip"><h5>Product Management</h5><span class="salary">$110k – $180k</span></div>
+        <div class="career-chip"><h5>Software Engineering</h5><span class="salary">$120k – $200k</span></div>
+        <div class="career-chip"><h5>Data Science</h5><span class="salary">$105k – $170k</span></div>
+        <div class="career-chip"><h5>UX Design</h5><span class="salary">$90k – $150k</span></div>
+        <div class="career-chip"><h5>Management Consulting</h5><span class="salary">$95k – $175k</span></div>
+        <div class="career-chip"><h5>Investment Banking</h5><span class="salary">$110k – $200k</span></div>
+        <div class="career-chip"><h5>Marketing Strategy</h5><span class="salary">$85k – $145k</span></div>
+        <div class="career-chip"><h5>Business Analytics</h5><span class="salary">$90k – $155k</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Coaching -->
+  <section style="background: var(--surface);">
+    <div class="section-inner">
+      <div class="section-tag fade-in">1-on-1 Coaching</div>
+      <h2 class="section-title fade-in">Learn from people who've been there</h2>
+      <p class="section-desc fade-in">
+        Book sessions with professionals at top companies. Get honest advice, industry insights, and a real understanding of what your target role looks like.
+      </p>
+      <div class="coaching-cards fade-in">
+        <div class="coach-card">
+          <div class="coach-avatar">S</div>
+          <h4>Sarah K.</h4>
+          <div class="role">Product Lead at Stripe</div>
+          <p>8 years in product. Helps students break into PM roles and navigate interviews.</p>
+        </div>
+        <div class="coach-card">
+          <div class="coach-avatar">M</div>
+          <h4>Marcus T.</h4>
+          <div class="role">Senior Engineer at Google</div>
+          <p>Guides aspiring engineers through portfolio building and technical interviews.</p>
+        </div>
+        <div class="coach-card">
+          <div class="coach-avatar">A</div>
+          <h4>Aisha R.</h4>
+          <div class="role">VP Strategy at McKinsey</div>
+          <p>Mentors students on consulting paths, case prep, and networking strategy.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonial-section">
+    <div class="section-inner">
+      <div class="section-tag fade-in">Student Stories</div>
+      <h2 class="section-title fade-in">They found their path</h2>
+      <p class="section-desc fade-in">Hear from students who used DreamForce to navigate their career decisions.</p>
+      <div class="testimonial-grid fade-in">
+        <div class="testimonial-card">
+          <blockquote>"I was torn between three completely different career paths. The quiz narrowed it down, and my coach helped me commit. I start at Deloitte this fall."</blockquote>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">JL</div>
+            <div>
+              <div class="testimonial-name">Jamie L.</div>
+              <div class="testimonial-role">UC Berkeley, Class of '25</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <blockquote>"The career guides are incredibly detailed. I didn't even know product management existed until DreamForce. Now it's my dream job."</blockquote>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">PR</div>
+            <div>
+              <div class="testimonial-name">Priya R.</div>
+              <div class="testimonial-role">NYU Stern, Class of '26</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="section-inner">
+      <h2 class="section-title fade-in" style="text-align: center;">Ready to find your career?</h2>
+      <p class="section-desc fade-in" style="text-align: center;">It starts with a 10-minute quiz. No fluff — just clarity.</p>
+      <div class="fade-in">
+        <a class="cta-btn" href="#">Take the Quiz — Free</a>
+        <a class="cta-btn cta-btn-outline" href="#">Browse Career Guides</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════ EDUCATORS PAGE ═══════════════ -->
+<div id="page-educators" class="page">
+
+  <!-- Hero -->
+  <section class="hero" style="min-height: auto; padding-top: 140px; padding-bottom: 80px;">
+    <button class="back-btn" onclick="showPage('home')">← Back</button>
+    <h1 style="font-size: clamp(2.4rem, 5vw, 3.5rem);">Give every student a career advisor.</h1>
+    <p>DreamForce's AI-powered platform scales your career center's impact — delivering personalized guidance to every student, not just the ones who walk through your door.</p>
+    <a class="cta-btn" href="#">Request a Demo</a>
+    <a class="cta-btn cta-btn-outline" href="#" style="margin-top: 12px;">View Case Studies</a>
+  </section>
+
+  <!-- Platform Features -->
+  <section>
+    <div class="section-inner">
+      <div class="section-tag fade-in">Platform</div>
+      <h2 class="section-title fade-in">Everything your career center needs</h2>
+      <p class="section-desc fade-in">
+        A comprehensive suite that works alongside your team — not instead of it.
+      </p>
+      <div class="features-grid fade-in">
+        <div class="feature-card">
+          <div class="feature-icon">🤖</div>
+          <h4>AI Career Quiz</h4>
+          <p>Students answer questions on personality, strengths, major, interests, and prior experience. Our AI maps them to the best-fit high-paying knowledge work roles.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📚</div>
+          <h4>Career Guide Library</h4>
+          <p>50+ in-depth guides for roles in tech, finance, consulting, healthcare, and more. Each covers day-to-day work, required skills, compensation, and breaking in.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📈</div>
+          <h4>Student Analytics</h4>
+          <p>Understand which careers your students are exploring, where they need support, and measure engagement across your entire student body.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎤</div>
+          <h4>Expert Coaching Network</h4>
+          <p>Give students access to 200+ industry professionals for 1-on-1 sessions. Vetted coaches from companies like Google, Goldman Sachs, and McKinsey.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔗</div>
+          <h4>LMS Integration</h4>
+          <p>Plugs into Canvas, Blackboard, and other learning management systems. Embed quizzes and guides directly in your existing workflows.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🛡</div>
+          <h4>FERPA Compliant</h4>
+          <p>Student data is encrypted, anonymized in analytics, and never shared. Full compliance with FERPA and institutional data governance policies.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Quiz Detail -->
+  <section class="quiz-section">
+    <div class="section-inner">
+      <div class="quiz-layout">
+        <div>
+          <div class="section-tag fade-in">AI-Powered Assessment</div>
+          <h2 class="section-title fade-in">Personalized at scale</h2>
+          <p class="section-desc fade-in">
+            Every student gets a tailored career assessment that considers their full profile — personality traits, academic background, skills, and work experience — then maps them to optimal career paths.
+          </p>
+          <div class="features-grid" style="grid-template-columns: 1fr; gap: 12px;">
+            <div class="feature-card fade-in" style="padding: 24px 28px; display: flex; align-items: flex-start; gap: 16px;">
+              <div class="feature-icon" style="flex-shrink: 0; margin-bottom: 0;">🧬</div>
+              <div>
+                <h4>Multi-dimensional profiling</h4>
+                <p>Personality, cognitive style, values, interests, skills, and experience — all factored in.</p>
+              </div>
+            </div>
+            <div class="feature-card fade-in" style="padding: 24px 28px; display: flex; align-items: flex-start; gap: 16px;">
+              <div class="feature-icon" style="flex-shrink: 0; margin-bottom: 0;">⚡</div>
+              <div>
+                <h4>Instant results</h4>
+                <p>Students receive ranked career matches with compatibility scores in under 30 seconds.</p>
+              </div>
+            </div>
+            <div class="feature-card fade-in" style="padding: 24px 28px; display: flex; align-items: flex-start; gap: 16px;">
+              <div class="feature-icon" style="flex-shrink: 0; margin-bottom: 0;">🔄</div>
+              <div>
+                <h4>Evolves over time</h4>
+                <p>Students can retake the quiz as they grow. Recommendations sharpen with each interaction.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="quiz-preview fade-in">
+          <div class="quiz-preview-header">
+            <div class="quiz-preview-dot"></div>
+            <div class="quiz-preview-label">Student Dashboard Preview</div>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text-tertiary); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.1em;">Top Career Matches</div>
+          <div class="quiz-item" style="display: flex; justify-content: space-between; align-items: center;">
+            <span>Product Management</span>
+            <span style="font-size: 0.78rem; color: var(--text-tertiary);">94% match</span>
+          </div>
+          <div class="quiz-item" style="display: flex; justify-content: space-between; align-items: center;">
+            <span>UX Research</span>
+            <span style="font-size: 0.78rem; color: var(--text-tertiary);">89% match</span>
+          </div>
+          <div class="quiz-item" style="display: flex; justify-content: space-between; align-items: center;">
+            <span>Management Consulting</span>
+            <span style="font-size: 0.78rem; color: var(--text-tertiary);">85% match</span>
+          </div>
+          <div class="quiz-item" style="display: flex; justify-content: space-between; align-items: center;">
+            <span>Business Analytics</span>
+            <span style="font-size: 0.78rem; color: var(--text-tertiary);">81% match</span>
+          </div>
+          <div class="quiz-progress"><div class="quiz-progress-bar" style="width: 100%;"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Career Guides for Educators -->
+  <section>
+    <div class="section-inner">
+      <div class="section-tag fade-in">Guide Library</div>
+      <h2 class="section-title fade-in">Comprehensive guides for high-growth roles</h2>
+      <p class="section-desc fade-in">
+        Your students get access to detailed, regularly updated guides for the most in-demand knowledge work careers.
+      </p>
+      <div class="careers-scroll fade-in">
+        <div class="career-chip"><h5>Product Management</h5><span class="salary">$110k – $180k</span></div>
+        <div class="career-chip"><h5>Software Engineering</h5><span class="salary">$120k – $200k</span></div>
+        <div class="career-chip"><h5>Data Science</h5><span class="salary">$105k – $170k</span></div>
+        <div class="career-chip"><h5>UX / Product Design</h5><span class="salary">$90k – $150k</span></div>
+        <div class="career-chip"><h5>Management Consulting</h5><span class="salary">$95k – $175k</span></div>
+        <div class="career-chip"><h5>Investment Banking</h5><span class="salary">$110k – $200k</span></div>
+        <div class="career-chip"><h5>Marketing Strategy</h5><span class="salary">$85k – $145k</span></div>
+        <div class="career-chip"><h5>Business Analytics</h5><span class="salary">$90k – $155k</span></div>
+        <div class="career-chip"><h5>Corporate Strategy</h5><span class="salary">$100k – $170k</span></div>
+        <div class="career-chip"><h5>Financial Analysis</h5><span class="salary">$80k – $140k</span></div>
+        <div class="career-chip"><h5>Healthcare Admin</h5><span class="salary">$75k – $130k</span></div>
+        <div class="career-chip"><h5>Legal Operations</h5><span class="salary">$85k – $150k</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section>
+    <div class="section-inner">
+      <div class="stats-bar fade-in">
+        <div class="stat-item">
+          <div class="stat-number">40+</div>
+          <div class="stat-label">Partner universities</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">12k</div>
+          <div class="stat-label">Students assessed</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">3.2x</div>
+          <div class="stat-label">More career center engagement</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">94%</div>
+          <div class="stat-label">Student satisfaction</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonial-section">
+    <div class="section-inner">
+      <div class="section-tag fade-in">From Partners</div>
+      <h2 class="section-title fade-in">Trusted by career centers</h2>
+      <p class="section-desc fade-in">Hear from universities already using DreamForce.</p>
+      <div class="testimonial-grid fade-in">
+        <div class="testimonial-card">
+          <blockquote>"We went from reaching 15% of our student body to over 60% in one semester. DreamForce gave us reach we couldn't achieve with our team alone."</blockquote>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">DM</div>
+            <div>
+              <div class="testimonial-name">Dr. Diana M.</div>
+              <div class="testimonial-role">Director of Career Services, State University</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <blockquote>"The analytics alone are worth it. We finally have data on what careers our students are exploring, so we can tailor programming accordingly."</blockquote>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">KP</div>
+            <div>
+              <div class="testimonial-name">Kevin P.</div>
+              <div class="testimonial-role">Associate Director, Career Development Center</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="section-inner">
+      <h2 class="section-title fade-in" style="text-align: center;">Bring DreamForce to your campus</h2>
+      <p class="section-desc fade-in" style="text-align: center;">Schedule a 30-minute demo with our partnerships team.</p>
+      <div class="fade-in">
+        <a class="cta-btn" href="#">Request a Demo</a>
+        <a class="cta-btn cta-btn-outline" href="#">Download One-Pager</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════ FOOTER (SHARED) ═══════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-left">
+      <a class="logo" onclick="showPage('home')">Dream<span>Force</span></a>
+      <p>© 2026 DreamForce. All rights reserved.</p>
+    </div>
+    <div class="footer-links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Contact</a>
+      <a href="#">Blog</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Page navigation
+  function showPage(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Re-trigger fade-ins
+    setTimeout(observeElements, 200);
+  }
+
+  // Intersection Observer for fade-in
+  function observeElements() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
         }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-        // Chart.js configuration
-        Chart.defaults.color = '#8b92b2';
-        Chart.defaults.borderColor = '#2a3052';
-        Chart.defaults.font.family = "'JetBrains Mono', monospace";
-        Chart.defaults.font.size = 11;
+    document.querySelectorAll('.fade-in:not(.visible)').forEach(el => observer.observe(el));
+  }
 
-        const chartConfig = {
-            type: 'line',
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                aspectRatio: 2,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        backgroundColor: '#1a1f3a',
-                        titleColor: '#e8eaf0',
-                        bodyColor: '#8b92b2',
-                        borderColor: '#00d4aa',
-                        borderWidth: 1,
-                        padding: 12,
-                        displayColors: false,
-                        callbacks: {
-                            label: function(context) {
-                                return '$' + context.parsed.y + 'K';
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: false,
-                        grid: {
-                            color: '#2a3052'
-                        },
-                        ticks: {
-                            callback: function(value) {
-                                return '$' + value + 'K';
-                            }
-                        }
-                    },
-                    x: {
-                        grid: {
-                            color: '#2a3052'
-                        }
-                    }
-                }
-            }
-        };
+  // Interactive quiz items
+  document.querySelectorAll('.quiz-item').forEach(item => {
+    item.addEventListener('click', function() {
+      this.parentElement.querySelectorAll('.quiz-item').forEach(i => i.classList.remove('selected'));
+      this.classList.add('selected');
+    });
+  });
 
-        // Investment Banking Chart
-        new Chart(document.getElementById('ibChart'), {
-            ...chartConfig,
-            data: {
-                labels: ['Year 0', 'Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
-                datasets: [{
-                    label: 'Total Compensation',
-                    data: [160, 180, 220, 260, 320, 400],
-                    borderColor: '#00d4aa',
-                    backgroundColor: 'rgba(0, 212, 170, 0.1)',
-                    tension: 0.4,
-                    borderWidth: 2,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#00d4aa',
-                    fill: true
-                }]
-            }
-        });
+  // Init
+  observeElements();
+</script>
 
-        // Management Consulting Chart
-        new Chart(document.getElementById('mcChart'), {
-            ...chartConfig,
-            data: {
-                labels: ['Year 0', 'Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
-                datasets: [{
-                    label: 'Total Compensation',
-                    data: [120, 135, 155, 180, 220, 270],
-                    borderColor: '#00d4aa',
-                    backgroundColor: 'rgba(0, 212, 170, 0.1)',
-                    tension: 0.4,
-                    borderWidth: 2,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#00d4aa',
-                    fill: true
-                }]
-            }
-        });
-
-        // Data Analytics Chart
-        new Chart(document.getElementById('daChart'), {
-            ...chartConfig,
-            data: {
-                labels: ['Year 0', 'Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
-                datasets: [{
-                    label: 'Total Compensation',
-                    data: [85, 95, 105, 118, 135, 155],
-                    borderColor: '#00d4aa',
-                    backgroundColor: 'rgba(0, 212, 170, 0.1)',
-                    tension: 0.4,
-                    borderWidth: 2,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#00d4aa',
-                    fill: true
-                }]
-            }
-        });
-
-        // Software Engineering Chart
-        new Chart(document.getElementById('seChart'), {
-            ...chartConfig,
-            data: {
-                labels: ['Year 0', 'Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
-                datasets: [{
-                    label: 'Total Compensation',
-                    data: [140, 155, 175, 200, 240, 290],
-                    borderColor: '#00d4aa',
-                    backgroundColor: 'rgba(0, 212, 170, 0.1)',
-                    tension: 0.4,
-                    borderWidth: 2,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#00d4aa',
-                    fill: true
-                }]
-            }
-        });
-    </script>
 </body>
 </html>
