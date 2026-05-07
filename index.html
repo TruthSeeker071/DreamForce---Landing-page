@@ -259,11 +259,11 @@
   .career-chip {
     padding: 20px 24px; background: var(--surface);
     border: 1px solid var(--border-light); border-radius: var(--radius-sm);
-    transition: all var(--transition); cursor: default;
+    transition: all var(--transition); cursor: pointer;
   }
   .career-chip:hover {
-    border-color: var(--border); transform: translateY(-2px);
-    box-shadow: var(--shadow-sm);
+    border-color: var(--accent); transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
   }
   .career-chip h5 {
     font-size: 0.9rem; font-weight: 600; margin-bottom: 4px;
@@ -271,6 +271,12 @@
   .career-chip .salary {
     font-size: 0.78rem; color: var(--text-tertiary); font-weight: 400;
   }
+  .career-chip .chip-arrow {
+    display: block; margin-top: 10px;
+    font-size: 0.72rem; font-weight: 500; color: var(--text-tertiary);
+    transition: all var(--transition);
+  }
+  .career-chip:hover .chip-arrow { color: var(--text); letter-spacing: 0.02em; }
 
   /* ── COACHING SECTION ── */
   .coaching-cards {
@@ -401,6 +407,176 @@
   }
   .back-btn:hover { color: var(--text); gap: 4px; }
 
+  /* ═══════ CAREER DEEP-DIVE PAGE ═══════ */
+  .career-hero {
+    padding: 140px 40px 80px; text-align: center;
+  }
+  .career-hero .section-tag { margin-bottom: 20px; }
+  .career-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 5vw, 3.5rem);
+    font-weight: 600; line-height: 1.1;
+    letter-spacing: -0.03em; margin-bottom: 16px;
+  }
+  .career-hero .tagline {
+    font-size: 1.1rem; color: var(--text-secondary);
+    font-weight: 300; max-width: 560px; margin: 0 auto 48px;
+    line-height: 1.7;
+  }
+
+  /* Metric cards row */
+  .metrics-row {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 16px; max-width: 1100px; margin: 0 auto;
+  }
+  .metric-card {
+    background: var(--surface); border: 1px solid var(--border-light);
+    border-radius: var(--radius); padding: 32px 24px;
+    text-align: center; transition: all var(--transition);
+  }
+  .metric-card:hover { border-color: var(--border); box-shadow: var(--shadow-sm); }
+  .metric-label {
+    font-size: 0.68rem; text-transform: uppercase;
+    letter-spacing: 0.14em; color: var(--text-tertiary);
+    font-weight: 500; margin-bottom: 12px;
+  }
+  .metric-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; font-weight: 600;
+    letter-spacing: -0.02em; margin-bottom: 4px;
+  }
+  .metric-sub {
+    font-size: 0.75rem; color: var(--text-tertiary); font-weight: 400;
+  }
+
+  /* Scale bar (for technical + AI automation) */
+  .scale-bar-container { margin-top: 12px; }
+  .scale-bar {
+    height: 6px; background: var(--border-light);
+    border-radius: 100px; overflow: hidden; margin-bottom: 6px;
+  }
+  .scale-bar-fill {
+    height: 100%; border-radius: 100px;
+    background: var(--accent);
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .scale-bar-labels {
+    display: flex; justify-content: space-between;
+    font-size: 0.65rem; color: var(--text-tertiary);
+  }
+
+  /* Overview section */
+  .overview-grid {
+    display: grid; grid-template-columns: 1.2fr 0.8fr;
+    gap: 48px; align-items: start;
+  }
+  .overview-text h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; font-weight: 600;
+    margin-bottom: 16px; letter-spacing: -0.02em;
+  }
+  .overview-text p {
+    font-size: 0.95rem; color: var(--text-secondary);
+    line-height: 1.8; margin-bottom: 16px;
+  }
+  .overview-sidebar {
+    background: var(--surface); border: 1px solid var(--border-light);
+    border-radius: var(--radius); padding: 32px;
+  }
+  .overview-sidebar h4 {
+    font-size: 0.85rem; font-weight: 600; margin-bottom: 20px;
+  }
+  .sidebar-item {
+    display: flex; justify-content: space-between;
+    padding: 14px 0; border-bottom: 1px solid var(--border-light);
+    font-size: 0.85rem;
+  }
+  .sidebar-item:last-child { border-bottom: none; }
+  .sidebar-item .label { color: var(--text-secondary); }
+  .sidebar-item .value { font-weight: 600; }
+
+  /* Day in the life */
+  .timeline { max-width: 700px; }
+  .timeline-item {
+    display: flex; gap: 24px; margin-bottom: 24px;
+    align-items: flex-start;
+  }
+  .timeline-time {
+    flex-shrink: 0; width: 72px;
+    font-size: 0.78rem; font-weight: 600;
+    color: var(--text-tertiary); padding-top: 2px;
+  }
+  .timeline-content {
+    background: var(--surface); border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm); padding: 20px 24px; flex: 1;
+  }
+  .timeline-content h5 {
+    font-size: 0.9rem; font-weight: 600; margin-bottom: 4px;
+  }
+  .timeline-content p {
+    font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6;
+  }
+
+  /* Skills pills */
+  .skills-pills {
+    display: flex; flex-wrap: wrap; gap: 10px;
+  }
+  .skill-pill {
+    padding: 10px 20px; background: var(--surface);
+    border: 1px solid var(--border-light); border-radius: 100px;
+    font-size: 0.82rem; font-weight: 500; color: var(--text-secondary);
+    transition: all var(--transition);
+  }
+  .skill-pill:hover { border-color: var(--accent); color: var(--text); }
+  .skill-pill.core {
+    background: var(--accent); color: #fff;
+    border-color: var(--accent);
+  }
+
+  /* AI outlook section */
+  .ai-outlook-card {
+    background: var(--surface); border: 1px solid var(--border-light);
+    border-radius: var(--radius); padding: 48px;
+    max-width: 800px;
+  }
+  .ai-outlook-card h4 {
+    font-size: 1.1rem; font-weight: 600; margin-bottom: 8px;
+  }
+  .ai-outlook-card > p {
+    font-size: 0.9rem; color: var(--text-secondary);
+    line-height: 1.7; margin-bottom: 24px;
+  }
+  .ai-bar-big {
+    height: 10px; background: var(--border-light);
+    border-radius: 100px; overflow: hidden; margin-bottom: 8px;
+  }
+  .ai-bar-big-fill {
+    height: 100%; border-radius: 100px;
+    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .ai-bar-low { background: #4ade80; }
+  .ai-bar-med { background: #facc15; }
+  .ai-bar-high { background: #f87171; }
+  .ai-bar-labels {
+    display: flex; justify-content: space-between;
+    font-size: 0.7rem; color: var(--text-tertiary); margin-bottom: 24px;
+  }
+  .ai-tasks { margin-top: 8px; }
+  .ai-task-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 0; border-bottom: 1px solid var(--border-light);
+    font-size: 0.85rem;
+  }
+  .ai-task-row:last-child { border-bottom: none; }
+  .ai-task-label { color: var(--text-secondary); }
+  .ai-task-risk {
+    font-weight: 600; font-size: 0.78rem;
+    padding: 4px 12px; border-radius: 100px;
+  }
+  .risk-low { background: #ecfdf5; color: #16a34a; }
+  .risk-med { background: #fefce8; color: #ca8a04; }
+  .risk-high { background: #fef2f2; color: #dc2626; }
+
   /* ── RESPONSIVE ── */
   @media (max-width: 900px) {
     .role-cards { grid-template-columns: 1fr; max-width: 400px; }
@@ -413,11 +589,14 @@
     .nav-links { display: none; }
     section { padding: 80px 24px; }
     .hero { padding: 120px 24px 80px; }
+    .metrics-row { grid-template-columns: repeat(2, 1fr); }
+    .overview-grid { grid-template-columns: 1fr; }
   }
 
   @media (max-width: 600px) {
     .careers-scroll { grid-template-columns: 1fr; }
     .stats-bar { grid-template-columns: 1fr; }
+    .metrics-row { grid-template-columns: 1fr; }
     .footer-inner { flex-direction: column; gap: 24px; text-align: center; }
   }
 
@@ -446,52 +625,33 @@
 
 <!-- ═══════════════ HOME PAGE ═══════════════ -->
 <div id="page-home" class="page active">
-
   <section class="hero">
-    <div class="hero-badge">
-      <span class="dot"></span>
-      Now accepting early partners
-    </div>
+    <div class="hero-badge"><span class="dot"></span>Now accepting early partners</div>
     <h1>Your career, clarified.</h1>
     <p>DreamForce helps students discover their ideal career path and gives career centers the AI-powered tools to guide them there.</p>
-
     <div class="selector-label">I am a...</div>
     <div class="role-cards">
       <div class="role-card" onclick="showPage('students')">
-        <div class="icon">🎓</div>
+        <div class="icon">&#127891;</div>
         <h3>Student</h3>
         <p>Discover the career that fits your strengths, interests, and ambitions.</p>
-        <span class="arrow">Explore → </span>
+        <span class="arrow">Explore &rarr;</span>
       </div>
       <div class="role-card" onclick="showPage('educators')">
-        <div class="icon">🏛</div>
+        <div class="icon">&#127963;</div>
         <h3>Career Center</h3>
         <p>Equip your students with AI-driven career guidance at scale.</p>
-        <span class="arrow">Learn more →</span>
+        <span class="arrow">Learn more &rarr;</span>
       </div>
     </div>
   </section>
-
-  <!-- Stats -->
   <section style="padding-top: 0;">
     <div class="section-inner">
       <div class="stats-bar fade-in">
-        <div class="stat-item">
-          <div class="stat-number">50+</div>
-          <div class="stat-label">Career guides</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">12k</div>
-          <div class="stat-label">Students guided</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">94%</div>
-          <div class="stat-label">Satisfaction rate</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">200+</div>
-          <div class="stat-label">Expert coaches</div>
-        </div>
+        <div class="stat-item"><div class="stat-number">50+</div><div class="stat-label">Career guides</div></div>
+        <div class="stat-item"><div class="stat-number">12k</div><div class="stat-label">Students guided</div></div>
+        <div class="stat-item"><div class="stat-number">94%</div><div class="stat-label">Satisfaction rate</div></div>
+        <div class="stat-item"><div class="stat-number">200+</div><div class="stat-label">Expert coaches</div></div>
       </div>
     </div>
   </section>
@@ -499,54 +659,37 @@
 
 <!-- ═══════════════ STUDENTS PAGE ═══════════════ -->
 <div id="page-students" class="page">
-
-  <!-- Hero -->
   <section class="hero" style="min-height: auto; padding-top: 140px; padding-bottom: 80px;">
-    <button class="back-btn" onclick="showPage('home')">← Back</button>
+    <button class="back-btn" onclick="showPage('home')">&larr; Back</button>
     <h1 style="font-size: clamp(2.4rem, 5vw, 3.5rem);">Find the career you were made for.</h1>
     <p>Stop guessing. Our AI-powered quiz, in-depth career guides, and 1-on-1 coaching with industry experts help you move forward with clarity and confidence.</p>
     <a class="cta-btn" href="#">Take the Career Quiz</a>
   </section>
 
-  <!-- AI Quiz Section -->
   <section class="quiz-section">
     <div class="section-inner">
       <div class="quiz-layout">
         <div>
           <div class="section-tag fade-in">AI-Powered Career Quiz</div>
           <h2 class="section-title fade-in">Discover what you're built for</h2>
-          <p class="section-desc fade-in">
-            Answer questions about your personality, skills, interests, and experiences. Our AI analyzes your unique profile against hundreds of career paths to surface the roles where you'll thrive.
-          </p>
+          <p class="section-desc fade-in">Answer questions about your personality, skills, interests, and experiences. Our AI analyzes your unique profile against hundreds of career paths to surface the roles where you'll thrive.</p>
           <div class="features-grid" style="grid-template-columns: 1fr; gap: 12px;">
             <div class="feature-card fade-in" style="padding: 24px 28px; display: flex; align-items: flex-start; gap: 16px;">
-              <div class="feature-icon" style="flex-shrink: 0; margin-bottom: 0;">🧠</div>
-              <div>
-                <h4>Personality & strengths</h4>
-                <p>Understand your working style, communication preferences, and natural talents.</p>
-              </div>
+              <div class="feature-icon" style="flex-shrink: 0; margin-bottom: 0;">&#129504;</div>
+              <div><h4>Personality &amp; strengths</h4><p>Understand your working style, communication preferences, and natural talents.</p></div>
             </div>
             <div class="feature-card fade-in" style="padding: 24px 28px; display: flex; align-items: flex-start; gap: 16px;">
-              <div class="feature-icon" style="flex-shrink: 0; margin-bottom: 0;">📊</div>
-              <div>
-                <h4>Skills & experience match</h4>
-                <p>Your major, coursework, and any work experience are factored into recommendations.</p>
-              </div>
+              <div class="feature-icon" style="flex-shrink: 0; margin-bottom: 0;">&#128202;</div>
+              <div><h4>Skills &amp; experience match</h4><p>Your major, coursework, and any work experience are factored into recommendations.</p></div>
             </div>
             <div class="feature-card fade-in" style="padding: 24px 28px; display: flex; align-items: flex-start; gap: 16px;">
-              <div class="feature-icon" style="flex-shrink: 0; margin-bottom: 0;">🎯</div>
-              <div>
-                <h4>Top career matches</h4>
-                <p>Get a ranked list of careers with compatibility scores and growth potential.</p>
-              </div>
+              <div class="feature-icon" style="flex-shrink: 0; margin-bottom: 0;">&#127919;</div>
+              <div><h4>Top career matches</h4><p>Get a ranked list of careers with compatibility scores and growth potential.</p></div>
             </div>
           </div>
         </div>
         <div class="quiz-preview fade-in">
-          <div class="quiz-preview-header">
-            <div class="quiz-preview-dot"></div>
-            <div class="quiz-preview-label">Career Quiz Preview</div>
-          </div>
+          <div class="quiz-preview-header"><div class="quiz-preview-dot"></div><div class="quiz-preview-label">Career Quiz Preview</div></div>
           <div style="font-size: 0.9rem; font-weight: 500; margin-bottom: 16px;">Which environment sounds most appealing?</div>
           <div class="quiz-item">Working independently on creative projects</div>
           <div class="quiz-item selected">Collaborating with a team to solve problems</div>
@@ -558,51 +701,33 @@
     </div>
   </section>
 
-  <!-- Career Guides -->
   <section>
     <div class="section-inner">
       <div class="section-tag fade-in">Career Guides</div>
       <h2 class="section-title fade-in">Deep-dive into the careers that interest you</h2>
-      <p class="section-desc fade-in">
-        Comprehensive guides covering day-to-day responsibilities, required skills, salary ranges, growth trajectories, and how to break in.
-      </p>
-      <div class="careers-scroll fade-in">
-        <div class="career-chip"><h5>Product Management</h5><span class="salary">$110k – $180k</span></div>
-        <div class="career-chip"><h5>Software Engineering</h5><span class="salary">$120k – $200k</span></div>
-        <div class="career-chip"><h5>Data Science</h5><span class="salary">$105k – $170k</span></div>
-        <div class="career-chip"><h5>UX Design</h5><span class="salary">$90k – $150k</span></div>
-        <div class="career-chip"><h5>Management Consulting</h5><span class="salary">$95k – $175k</span></div>
-        <div class="career-chip"><h5>Investment Banking</h5><span class="salary">$110k – $200k</span></div>
-        <div class="career-chip"><h5>Marketing Strategy</h5><span class="salary">$85k – $145k</span></div>
-        <div class="career-chip"><h5>Business Analytics</h5><span class="salary">$90k – $155k</span></div>
-      </div>
+      <p class="section-desc fade-in">Comprehensive guides covering day-to-day responsibilities, required skills, salary ranges, growth trajectories, and how to break in.</p>
+      <div class="careers-scroll fade-in" id="student-careers"></div>
     </div>
   </section>
 
-  <!-- Coaching -->
   <section style="background: var(--surface);">
     <div class="section-inner">
       <div class="section-tag fade-in">1-on-1 Coaching</div>
       <h2 class="section-title fade-in">Learn from people who've been there</h2>
-      <p class="section-desc fade-in">
-        Book sessions with professionals at top companies. Get honest advice, industry insights, and a real understanding of what your target role looks like.
-      </p>
+      <p class="section-desc fade-in">Book sessions with professionals at top companies. Get honest advice, industry insights, and a real understanding of what your target role looks like.</p>
       <div class="coaching-cards fade-in">
         <div class="coach-card">
-          <div class="coach-avatar">S</div>
-          <h4>Sarah K.</h4>
+          <div class="coach-avatar">S</div><h4>Sarah K.</h4>
           <div class="role">Product Lead at Stripe</div>
           <p>8 years in product. Helps students break into PM roles and navigate interviews.</p>
         </div>
         <div class="coach-card">
-          <div class="coach-avatar">M</div>
-          <h4>Marcus T.</h4>
+          <div class="coach-avatar">M</div><h4>Marcus T.</h4>
           <div class="role">Senior Engineer at Google</div>
           <p>Guides aspiring engineers through portfolio building and technical interviews.</p>
         </div>
         <div class="coach-card">
-          <div class="coach-avatar">A</div>
-          <h4>Aisha R.</h4>
+          <div class="coach-avatar">A</div><h4>Aisha R.</h4>
           <div class="role">VP Strategy at McKinsey</div>
           <p>Mentors students on consulting paths, case prep, and networking strategy.</p>
         </div>
@@ -610,7 +735,6 @@
     </div>
   </section>
 
-  <!-- Testimonials -->
   <section class="testimonial-section">
     <div class="section-inner">
       <div class="section-tag fade-in">Student Stories</div>
@@ -619,35 +743,22 @@
       <div class="testimonial-grid fade-in">
         <div class="testimonial-card">
           <blockquote>"I was torn between three completely different career paths. The quiz narrowed it down, and my coach helped me commit. I start at Deloitte this fall."</blockquote>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">JL</div>
-            <div>
-              <div class="testimonial-name">Jamie L.</div>
-              <div class="testimonial-role">UC Berkeley, Class of '25</div>
-            </div>
-          </div>
+          <div class="testimonial-author"><div class="testimonial-avatar">JL</div><div><div class="testimonial-name">Jamie L.</div><div class="testimonial-role">UC Berkeley, Class of '25</div></div></div>
         </div>
         <div class="testimonial-card">
           <blockquote>"The career guides are incredibly detailed. I didn't even know product management existed until DreamForce. Now it's my dream job."</blockquote>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">PR</div>
-            <div>
-              <div class="testimonial-name">Priya R.</div>
-              <div class="testimonial-role">NYU Stern, Class of '26</div>
-            </div>
-          </div>
+          <div class="testimonial-author"><div class="testimonial-avatar">PR</div><div><div class="testimonial-name">Priya R.</div><div class="testimonial-role">NYU Stern, Class of '26</div></div></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CTA -->
   <section class="cta-section">
     <div class="section-inner">
       <h2 class="section-title fade-in" style="text-align: center;">Ready to find your career?</h2>
-      <p class="section-desc fade-in" style="text-align: center;">It starts with a 10-minute quiz. No fluff — just clarity.</p>
+      <p class="section-desc fade-in" style="text-align: center;">It starts with a 10-minute quiz. No fluff &mdash; just clarity.</p>
       <div class="fade-in">
-        <a class="cta-btn" href="#">Take the Quiz — Free</a>
+        <a class="cta-btn" href="#">Take the Quiz &mdash; Free</a>
         <a class="cta-btn cta-btn-outline" href="#">Browse Career Guides</a>
       </div>
     </div>
@@ -656,171 +767,85 @@
 
 <!-- ═══════════════ EDUCATORS PAGE ═══════════════ -->
 <div id="page-educators" class="page">
-
-  <!-- Hero -->
   <section class="hero" style="min-height: auto; padding-top: 140px; padding-bottom: 80px;">
-    <button class="back-btn" onclick="showPage('home')">← Back</button>
+    <button class="back-btn" onclick="showPage('home')">&larr; Back</button>
     <h1 style="font-size: clamp(2.4rem, 5vw, 3.5rem);">Give every student a career advisor.</h1>
-    <p>DreamForce's AI-powered platform scales your career center's impact — delivering personalized guidance to every student, not just the ones who walk through your door.</p>
+    <p>DreamForce's AI-powered platform scales your career center's impact &mdash; delivering personalized guidance to every student, not just the ones who walk through your door.</p>
     <a class="cta-btn" href="#">Request a Demo</a>
     <a class="cta-btn cta-btn-outline" href="#" style="margin-top: 12px;">View Case Studies</a>
   </section>
 
-  <!-- Platform Features -->
   <section>
     <div class="section-inner">
       <div class="section-tag fade-in">Platform</div>
       <h2 class="section-title fade-in">Everything your career center needs</h2>
-      <p class="section-desc fade-in">
-        A comprehensive suite that works alongside your team — not instead of it.
-      </p>
+      <p class="section-desc fade-in">A comprehensive suite that works alongside your team &mdash; not instead of it.</p>
       <div class="features-grid fade-in">
-        <div class="feature-card">
-          <div class="feature-icon">🤖</div>
-          <h4>AI Career Quiz</h4>
-          <p>Students answer questions on personality, strengths, major, interests, and prior experience. Our AI maps them to the best-fit high-paying knowledge work roles.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📚</div>
-          <h4>Career Guide Library</h4>
-          <p>50+ in-depth guides for roles in tech, finance, consulting, healthcare, and more. Each covers day-to-day work, required skills, compensation, and breaking in.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📈</div>
-          <h4>Student Analytics</h4>
-          <p>Understand which careers your students are exploring, where they need support, and measure engagement across your entire student body.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🎤</div>
-          <h4>Expert Coaching Network</h4>
-          <p>Give students access to 200+ industry professionals for 1-on-1 sessions. Vetted coaches from companies like Google, Goldman Sachs, and McKinsey.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🔗</div>
-          <h4>LMS Integration</h4>
-          <p>Plugs into Canvas, Blackboard, and other learning management systems. Embed quizzes and guides directly in your existing workflows.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🛡</div>
-          <h4>FERPA Compliant</h4>
-          <p>Student data is encrypted, anonymized in analytics, and never shared. Full compliance with FERPA and institutional data governance policies.</p>
-        </div>
+        <div class="feature-card"><div class="feature-icon">&#129302;</div><h4>AI Career Quiz</h4><p>Students answer questions on personality, strengths, major, interests, and prior experience. Our AI maps them to the best-fit high-paying knowledge work roles.</p></div>
+        <div class="feature-card"><div class="feature-icon">&#128218;</div><h4>Career Guide Library</h4><p>50+ in-depth guides for roles in tech, finance, consulting, healthcare, and more. Each covers day-to-day work, required skills, compensation, and breaking in.</p></div>
+        <div class="feature-card"><div class="feature-icon">&#128200;</div><h4>Student Analytics</h4><p>Understand which careers your students are exploring, where they need support, and measure engagement across your entire student body.</p></div>
+        <div class="feature-card"><div class="feature-icon">&#127908;</div><h4>Expert Coaching Network</h4><p>Give students access to 200+ industry professionals for 1-on-1 sessions. Vetted coaches from companies like Google, Goldman Sachs, and McKinsey.</p></div>
+        <div class="feature-card"><div class="feature-icon">&#128279;</div><h4>LMS Integration</h4><p>Plugs into Canvas, Blackboard, and other learning management systems. Embed quizzes and guides directly in your existing workflows.</p></div>
+        <div class="feature-card"><div class="feature-icon">&#128737;</div><h4>FERPA Compliant</h4><p>Student data is encrypted, anonymized in analytics, and never shared. Full compliance with FERPA and institutional data governance policies.</p></div>
       </div>
     </div>
   </section>
 
-  <!-- AI Quiz Detail -->
   <section class="quiz-section">
     <div class="section-inner">
       <div class="quiz-layout">
         <div>
           <div class="section-tag fade-in">AI-Powered Assessment</div>
           <h2 class="section-title fade-in">Personalized at scale</h2>
-          <p class="section-desc fade-in">
-            Every student gets a tailored career assessment that considers their full profile — personality traits, academic background, skills, and work experience — then maps them to optimal career paths.
-          </p>
+          <p class="section-desc fade-in">Every student gets a tailored career assessment that considers their full profile &mdash; personality traits, academic background, skills, and work experience &mdash; then maps them to optimal career paths.</p>
           <div class="features-grid" style="grid-template-columns: 1fr; gap: 12px;">
             <div class="feature-card fade-in" style="padding: 24px 28px; display: flex; align-items: flex-start; gap: 16px;">
-              <div class="feature-icon" style="flex-shrink: 0; margin-bottom: 0;">🧬</div>
-              <div>
-                <h4>Multi-dimensional profiling</h4>
-                <p>Personality, cognitive style, values, interests, skills, and experience — all factored in.</p>
-              </div>
+              <div class="feature-icon" style="flex-shrink: 0; margin-bottom: 0;">&#129516;</div>
+              <div><h4>Multi-dimensional profiling</h4><p>Personality, cognitive style, values, interests, skills, and experience &mdash; all factored in.</p></div>
             </div>
             <div class="feature-card fade-in" style="padding: 24px 28px; display: flex; align-items: flex-start; gap: 16px;">
-              <div class="feature-icon" style="flex-shrink: 0; margin-bottom: 0;">⚡</div>
-              <div>
-                <h4>Instant results</h4>
-                <p>Students receive ranked career matches with compatibility scores in under 30 seconds.</p>
-              </div>
+              <div class="feature-icon" style="flex-shrink: 0; margin-bottom: 0;">&#9889;</div>
+              <div><h4>Instant results</h4><p>Students receive ranked career matches with compatibility scores in under 30 seconds.</p></div>
             </div>
             <div class="feature-card fade-in" style="padding: 24px 28px; display: flex; align-items: flex-start; gap: 16px;">
-              <div class="feature-icon" style="flex-shrink: 0; margin-bottom: 0;">🔄</div>
-              <div>
-                <h4>Evolves over time</h4>
-                <p>Students can retake the quiz as they grow. Recommendations sharpen with each interaction.</p>
-              </div>
+              <div class="feature-icon" style="flex-shrink: 0; margin-bottom: 0;">&#128260;</div>
+              <div><h4>Evolves over time</h4><p>Students can retake the quiz as they grow. Recommendations sharpen with each interaction.</p></div>
             </div>
           </div>
         </div>
         <div class="quiz-preview fade-in">
-          <div class="quiz-preview-header">
-            <div class="quiz-preview-dot"></div>
-            <div class="quiz-preview-label">Student Dashboard Preview</div>
-          </div>
+          <div class="quiz-preview-header"><div class="quiz-preview-dot"></div><div class="quiz-preview-label">Student Dashboard Preview</div></div>
           <div style="font-size: 0.8rem; color: var(--text-tertiary); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.1em;">Top Career Matches</div>
-          <div class="quiz-item" style="display: flex; justify-content: space-between; align-items: center;">
-            <span>Product Management</span>
-            <span style="font-size: 0.78rem; color: var(--text-tertiary);">94% match</span>
-          </div>
-          <div class="quiz-item" style="display: flex; justify-content: space-between; align-items: center;">
-            <span>UX Research</span>
-            <span style="font-size: 0.78rem; color: var(--text-tertiary);">89% match</span>
-          </div>
-          <div class="quiz-item" style="display: flex; justify-content: space-between; align-items: center;">
-            <span>Management Consulting</span>
-            <span style="font-size: 0.78rem; color: var(--text-tertiary);">85% match</span>
-          </div>
-          <div class="quiz-item" style="display: flex; justify-content: space-between; align-items: center;">
-            <span>Business Analytics</span>
-            <span style="font-size: 0.78rem; color: var(--text-tertiary);">81% match</span>
-          </div>
+          <div class="quiz-item" style="display: flex; justify-content: space-between; align-items: center;"><span>Product Management</span><span style="font-size: 0.78rem; color: var(--text-tertiary);">94% match</span></div>
+          <div class="quiz-item" style="display: flex; justify-content: space-between; align-items: center;"><span>UX Research</span><span style="font-size: 0.78rem; color: var(--text-tertiary);">89% match</span></div>
+          <div class="quiz-item" style="display: flex; justify-content: space-between; align-items: center;"><span>Management Consulting</span><span style="font-size: 0.78rem; color: var(--text-tertiary);">85% match</span></div>
+          <div class="quiz-item" style="display: flex; justify-content: space-between; align-items: center;"><span>Business Analytics</span><span style="font-size: 0.78rem; color: var(--text-tertiary);">81% match</span></div>
           <div class="quiz-progress"><div class="quiz-progress-bar" style="width: 100%;"></div></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Career Guides for Educators -->
   <section>
     <div class="section-inner">
       <div class="section-tag fade-in">Guide Library</div>
       <h2 class="section-title fade-in">Comprehensive guides for high-growth roles</h2>
-      <p class="section-desc fade-in">
-        Your students get access to detailed, regularly updated guides for the most in-demand knowledge work careers.
-      </p>
-      <div class="careers-scroll fade-in">
-        <div class="career-chip"><h5>Product Management</h5><span class="salary">$110k – $180k</span></div>
-        <div class="career-chip"><h5>Software Engineering</h5><span class="salary">$120k – $200k</span></div>
-        <div class="career-chip"><h5>Data Science</h5><span class="salary">$105k – $170k</span></div>
-        <div class="career-chip"><h5>UX / Product Design</h5><span class="salary">$90k – $150k</span></div>
-        <div class="career-chip"><h5>Management Consulting</h5><span class="salary">$95k – $175k</span></div>
-        <div class="career-chip"><h5>Investment Banking</h5><span class="salary">$110k – $200k</span></div>
-        <div class="career-chip"><h5>Marketing Strategy</h5><span class="salary">$85k – $145k</span></div>
-        <div class="career-chip"><h5>Business Analytics</h5><span class="salary">$90k – $155k</span></div>
-        <div class="career-chip"><h5>Corporate Strategy</h5><span class="salary">$100k – $170k</span></div>
-        <div class="career-chip"><h5>Financial Analysis</h5><span class="salary">$80k – $140k</span></div>
-        <div class="career-chip"><h5>Healthcare Admin</h5><span class="salary">$75k – $130k</span></div>
-        <div class="career-chip"><h5>Legal Operations</h5><span class="salary">$85k – $150k</span></div>
-      </div>
+      <p class="section-desc fade-in">Your students get access to detailed, regularly updated guides for the most in-demand knowledge work careers.</p>
+      <div class="careers-scroll fade-in" id="educator-careers"></div>
     </div>
   </section>
 
-  <!-- Stats -->
   <section>
     <div class="section-inner">
       <div class="stats-bar fade-in">
-        <div class="stat-item">
-          <div class="stat-number">40+</div>
-          <div class="stat-label">Partner universities</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">12k</div>
-          <div class="stat-label">Students assessed</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">3.2x</div>
-          <div class="stat-label">More career center engagement</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">94%</div>
-          <div class="stat-label">Student satisfaction</div>
-        </div>
+        <div class="stat-item"><div class="stat-number">40+</div><div class="stat-label">Partner universities</div></div>
+        <div class="stat-item"><div class="stat-number">12k</div><div class="stat-label">Students assessed</div></div>
+        <div class="stat-item"><div class="stat-number">3.2x</div><div class="stat-label">More career center engagement</div></div>
+        <div class="stat-item"><div class="stat-number">94%</div><div class="stat-label">Student satisfaction</div></div>
       </div>
     </div>
   </section>
 
-  <!-- Testimonials -->
   <section class="testimonial-section">
     <div class="section-inner">
       <div class="section-tag fade-in">From Partners</div>
@@ -829,47 +854,36 @@
       <div class="testimonial-grid fade-in">
         <div class="testimonial-card">
           <blockquote>"We went from reaching 15% of our student body to over 60% in one semester. DreamForce gave us reach we couldn't achieve with our team alone."</blockquote>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">DM</div>
-            <div>
-              <div class="testimonial-name">Dr. Diana M.</div>
-              <div class="testimonial-role">Director of Career Services, State University</div>
-            </div>
-          </div>
+          <div class="testimonial-author"><div class="testimonial-avatar">DM</div><div><div class="testimonial-name">Dr. Diana M.</div><div class="testimonial-role">Director of Career Services, State University</div></div></div>
         </div>
         <div class="testimonial-card">
           <blockquote>"The analytics alone are worth it. We finally have data on what careers our students are exploring, so we can tailor programming accordingly."</blockquote>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">KP</div>
-            <div>
-              <div class="testimonial-name">Kevin P.</div>
-              <div class="testimonial-role">Associate Director, Career Development Center</div>
-            </div>
-          </div>
+          <div class="testimonial-author"><div class="testimonial-avatar">KP</div><div><div class="testimonial-name">Kevin P.</div><div class="testimonial-role">Associate Director, Career Development Center</div></div></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CTA -->
   <section class="cta-section">
     <div class="section-inner">
       <h2 class="section-title fade-in" style="text-align: center;">Bring DreamForce to your campus</h2>
       <p class="section-desc fade-in" style="text-align: center;">Schedule a 30-minute demo with our partnerships team.</p>
-      <div class="fade-in">
-        <a class="cta-btn" href="#">Request a Demo</a>
-        <a class="cta-btn cta-btn-outline" href="#">Download One-Pager</a>
-      </div>
+      <div class="fade-in"><a class="cta-btn" href="#">Request a Demo</a><a class="cta-btn cta-btn-outline" href="#">Download One-Pager</a></div>
     </div>
   </section>
 </div>
 
-<!-- ═══════════════ FOOTER (SHARED) ═══════════════ -->
+<!-- ═══════════════ CAREER DEEP-DIVE (DYNAMIC) ═══════════════ -->
+<div id="page-career" class="page">
+  <div id="career-content"></div>
+</div>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
 <footer>
   <div class="footer-inner">
     <div class="footer-left">
       <a class="logo" onclick="showPage('home')">Dream<span>Force</span></a>
-      <p>© 2026 DreamForce. All rights reserved.</p>
+      <p>&copy; 2026 DreamForce. All rights reserved.</p>
     </div>
     <div class="footer-links">
       <a href="#">Privacy</a>
@@ -881,39 +895,600 @@
 </footer>
 
 <script>
-  // Page navigation
-  function showPage(page) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('page-' + page).classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    // Re-trigger fade-ins
-    setTimeout(observeElements, 200);
+// ═══════════════ CAREER DATA ═══════════════
+const careers = {
+  "product-management": {
+    title: "Product Management",
+    tagline: "Own the vision. Coordinate engineering, design, and business to ship products people love.",
+    entrySalary: "$95k",
+    midSalary: "$155k",
+    seniorSalary: "$200k+",
+    jobGrowth: "+12%",
+    jobGrowthLabel: "Faster than average",
+    technicalScore: 45,
+    aiAutomation: 25,
+    aiRiskLevel: "low",
+    overview: "Product managers sit at the intersection of business, technology, and user experience. You define what gets built, why it matters, and how success is measured. It requires strong communication, analytical thinking, and the ability to make trade-offs under uncertainty. PMs don't write code or push pixels, but they need to understand both deeply enough to earn the trust of their teams.",
+    dayInLife: [
+      { time: "9:00 AM", title: "Standup", desc: "Sync with engineering on sprint progress, unblock any issues." },
+      { time: "10:00 AM", title: "User research review", desc: "Analyze interview transcripts and usage data to identify patterns." },
+      { time: "11:30 AM", title: "Roadmap planning", desc: "Prioritize features with stakeholders based on impact and effort." },
+      { time: "1:00 PM", title: "Design review", desc: "Give feedback on wireframes and prototypes with the design team." },
+      { time: "3:00 PM", title: "Metrics deep-dive", desc: "Review product analytics, track KPIs, and prep for leadership update." },
+      { time: "4:30 PM", title: "Strategy doc writing", desc: "Draft a product brief for next quarter's initiative." }
+    ],
+    coreSkills: ["Strategic thinking", "Data analysis", "Communication"],
+    otherSkills: ["SQL basics", "Wireframing", "A/B testing", "Stakeholder management", "User research", "Agile/Scrum"],
+    sidebar: { "Degree required": "Not strictly", "Common majors": "Business, CS, Eng.", "Remote availability": "High", "Work-life balance": "Moderate", "Travel": "Low" },
+    aiOutlook: "AI will augment PMs by automating data analysis, generating PRDs, and summarizing user feedback, but the strategic judgment, cross-functional leadership, and stakeholder negotiation at the core of the role are difficult to automate.",
+    aiTasks: [
+      { task: "Writing PRDs & specs", risk: "med" },
+      { task: "User interview analysis", risk: "med" },
+      { task: "Strategic prioritization", risk: "low" },
+      { task: "Stakeholder alignment", risk: "low" },
+      { task: "Competitive research", risk: "high" }
+    ]
+  },
+  "software-engineering": {
+    title: "Software Engineering",
+    tagline: "Build the systems that power everything. From web apps to infrastructure to AI.",
+    entrySalary: "$105k",
+    midSalary: "$165k",
+    seniorSalary: "$220k+",
+    jobGrowth: "+17%",
+    jobGrowthLabel: "Much faster than average",
+    technicalScore: 95,
+    aiAutomation: 40,
+    aiRiskLevel: "med",
+    overview: "Software engineers design, build, and maintain the code that runs applications, platforms, and systems. The field spans front-end web development to machine learning infrastructure to distributed systems. Strong problem-solving skills and comfort with ambiguity are essential. Engineers collaborate closely with product managers, designers, and other engineers to turn requirements into working software.",
+    dayInLife: [
+      { time: "9:30 AM", title: "Code review", desc: "Review pull requests from teammates, leave feedback and approve." },
+      { time: "10:30 AM", title: "Feature development", desc: "Write and test code for a new API endpoint." },
+      { time: "12:00 PM", title: "Architecture discussion", desc: "Whiteboard a scalable approach for a new microservice." },
+      { time: "1:30 PM", title: "Debugging", desc: "Investigate and fix a production performance issue." },
+      { time: "3:00 PM", title: "Pair programming", desc: "Collaborate with a junior engineer on a complex integration." },
+      { time: "4:30 PM", title: "CI/CD & deploy", desc: "Merge feature branch, monitor deployment pipeline." }
+    ],
+    coreSkills: ["Data structures & algorithms", "System design", "Problem solving"],
+    otherSkills: ["Git & version control", "Testing frameworks", "Cloud (AWS/GCP)", "Databases", "REST/GraphQL APIs", "CI/CD"],
+    sidebar: { "Degree required": "Preferred, not required", "Common majors": "CS, Math, ECE", "Remote availability": "Very high", "Work-life balance": "Varies", "Travel": "Minimal" },
+    aiOutlook: "AI coding assistants are accelerating development speed significantly and can handle boilerplate code, testing, and simple bug fixes. However, complex system design, architectural decisions, debugging novel issues, and understanding nuanced requirements remain deeply human skills. The demand for engineers is growing, and AI tools are making each engineer more productive rather than replacing them.",
+    aiTasks: [
+      { task: "Boilerplate & scaffolding", risk: "high" },
+      { task: "Unit test generation", risk: "high" },
+      { task: "Bug fixing (simple)", risk: "med" },
+      { task: "System architecture", risk: "low" },
+      { task: "Complex debugging", risk: "low" }
+    ]
+  },
+  "data-science": {
+    title: "Data Science",
+    tagline: "Extract meaning from data. Build models that drive decisions across every industry.",
+    entrySalary: "$90k",
+    midSalary: "$140k",
+    seniorSalary: "$185k+",
+    jobGrowth: "+35%",
+    jobGrowthLabel: "Much faster than average",
+    technicalScore: 85,
+    aiAutomation: 45,
+    aiRiskLevel: "med",
+    overview: "Data scientists combine statistics, programming, and domain expertise to extract insights from complex datasets. The role involves cleaning and exploring data, building predictive models, running experiments, and communicating findings to stakeholders. You need strong mathematical intuition and the ability to translate business questions into analytical frameworks.",
+    dayInLife: [
+      { time: "9:00 AM", title: "Data exploration", desc: "Write SQL queries and Python scripts to investigate a new dataset." },
+      { time: "10:30 AM", title: "Model iteration", desc: "Tune hyperparameters and evaluate model performance metrics." },
+      { time: "12:00 PM", title: "Stakeholder meeting", desc: "Present preliminary findings to the marketing team." },
+      { time: "1:30 PM", title: "Feature engineering", desc: "Create new variables from raw data to improve predictions." },
+      { time: "3:00 PM", title: "A/B test analysis", desc: "Analyze experiment results and determine statistical significance." },
+      { time: "4:30 PM", title: "Documentation", desc: "Write up methodology and results for the analytics wiki." }
+    ],
+    coreSkills: ["Statistics & probability", "Python / R", "Machine learning"],
+    otherSkills: ["SQL", "Data visualization", "Deep learning", "Experimental design", "Feature engineering", "Communication"],
+    sidebar: { "Degree required": "Usually (MS preferred)", "Common majors": "Stats, CS, Math, Econ", "Remote availability": "High", "Work-life balance": "Good", "Travel": "Minimal" },
+    aiOutlook: "AI tools can now automate exploratory data analysis, feature selection, and even some model building. However, framing the right questions, understanding domain context, designing rigorous experiments, and communicating insights to non-technical stakeholders are skills that remain highly human. The role is shifting toward more strategic and less mechanical work.",
+    aiTasks: [
+      { task: "Exploratory analysis", risk: "high" },
+      { task: "Basic model building", risk: "high" },
+      { task: "Experiment design", risk: "low" },
+      { task: "Stakeholder communication", risk: "low" },
+      { task: "Feature engineering", risk: "med" }
+    ]
+  },
+  "ux-design": {
+    title: "UX Design",
+    tagline: "Shape how people experience products. Research, prototype, and design with empathy.",
+    entrySalary: "$75k",
+    midSalary: "$120k",
+    seniorSalary: "$165k+",
+    jobGrowth: "+16%",
+    jobGrowthLabel: "Much faster than average",
+    technicalScore: 35,
+    aiAutomation: 30,
+    aiRiskLevel: "low",
+    overview: "UX designers research user needs, define information architecture, create wireframes and prototypes, and conduct usability testing to ensure products are intuitive and delightful. The role blends creativity with analytical thinking. You need empathy for users, strong visual and interaction design skills, and the ability to advocate for the user within cross-functional teams.",
+    dayInLife: [
+      { time: "9:00 AM", title: "User interviews", desc: "Conduct moderated research sessions with target users." },
+      { time: "10:30 AM", title: "Synthesis", desc: "Organize research notes into themes and insight statements." },
+      { time: "12:00 PM", title: "Wireframing", desc: "Sketch low-fidelity flows for a new onboarding experience." },
+      { time: "1:30 PM", title: "Design critique", desc: "Present work to the design team for feedback." },
+      { time: "3:00 PM", title: "Prototyping", desc: "Build interactive prototypes in Figma for usability testing." },
+      { time: "4:30 PM", title: "Handoff prep", desc: "Annotate designs and prepare specs for engineering." }
+    ],
+    coreSkills: ["User research", "Interaction design", "Prototyping"],
+    otherSkills: ["Figma/Sketch", "Information architecture", "Usability testing", "Design systems", "Accessibility", "Visual design"],
+    sidebar: { "Degree required": "No (portfolio matters)", "Common majors": "Design, HCI, Psych", "Remote availability": "High", "Work-life balance": "Good", "Travel": "Low" },
+    aiOutlook: "AI can generate UI layouts, create variations, and even produce initial prototypes from descriptions. But understanding human behavior, conducting meaningful user research, making nuanced design decisions, and crafting cohesive experiences across complex products remain firmly human. AI becomes a powerful tool in the designer's toolkit rather than a replacement.",
+    aiTasks: [
+      { task: "Generating UI mockups", risk: "med" },
+      { task: "Icon & asset creation", risk: "high" },
+      { task: "User research synthesis", risk: "low" },
+      { task: "Design system decisions", risk: "low" },
+      { task: "Usability test moderation", risk: "low" }
+    ]
+  },
+  "management-consulting": {
+    title: "Management Consulting",
+    tagline: "Solve business problems for the world's largest organizations, then move on to the next.",
+    entrySalary: "$95k",
+    midSalary: "$160k",
+    seniorSalary: "$250k+",
+    jobGrowth: "+10%",
+    jobGrowthLabel: "Average",
+    technicalScore: 30,
+    aiAutomation: 30,
+    aiRiskLevel: "low",
+    overview: "Management consultants help organizations solve complex strategic, operational, and organizational challenges. You analyze data, interview stakeholders, develop recommendations, and present findings to senior executives. The work is fast-paced, project-based, and exposes you to a wide range of industries and problems. Strong analytical skills, structured thinking, and executive presence are essential.",
+    dayInLife: [
+      { time: "8:30 AM", title: "Team check-in", desc: "Align on workstream progress and daily deliverables." },
+      { time: "9:30 AM", title: "Client interviews", desc: "Speak with department heads to understand pain points." },
+      { time: "11:00 AM", title: "Analysis", desc: "Build financial models and analyze market data in Excel." },
+      { time: "1:00 PM", title: "Slide creation", desc: "Structure findings into a clear, compelling deck." },
+      { time: "3:00 PM", title: "Working session", desc: "Collaborate with client counterparts on implementation plan." },
+      { time: "5:00 PM", title: "Partner review", desc: "Present draft recommendations to the senior partner for feedback." }
+    ],
+    coreSkills: ["Structured problem solving", "Communication", "Business acumen"],
+    otherSkills: ["Excel modeling", "Slide storytelling", "Market sizing", "Stakeholder management", "Industry research", "Implementation planning"],
+    sidebar: { "Degree required": "Usually (MBA common)", "Common majors": "Business, Econ, Eng.", "Remote availability": "Low (client-site)", "Work-life balance": "Demanding", "Travel": "Heavy (60-80%)" },
+    aiOutlook: "AI can accelerate market research, data analysis, and even initial slide generation. But the core of consulting is relationship-driven: understanding organizational dynamics, navigating politics, building trust with executives, and delivering tailored recommendations that account for human factors AI cannot perceive.",
+    aiTasks: [
+      { task: "Market research", risk: "high" },
+      { task: "Data gathering & analysis", risk: "med" },
+      { task: "Client relationship management", risk: "low" },
+      { task: "Organizational diagnosis", risk: "low" },
+      { task: "Slide & deck creation", risk: "med" }
+    ]
+  },
+  "investment-banking": {
+    title: "Investment Banking",
+    tagline: "Advise corporations on M&A, capital raises, and high-stakes financial transactions.",
+    entrySalary: "$110k",
+    midSalary: "$200k",
+    seniorSalary: "$400k+",
+    jobGrowth: "+7%",
+    jobGrowthLabel: "Average",
+    technicalScore: 55,
+    aiAutomation: 35,
+    aiRiskLevel: "med",
+    overview: "Investment bankers advise companies on mergers, acquisitions, IPOs, and debt offerings. The work involves financial modeling, valuation analysis, preparing pitch books, and managing deal execution. Hours are long and the environment is intense, but compensation is among the highest of any entry-level career. Strong quantitative skills and attention to detail are critical.",
+    dayInLife: [
+      { time: "9:00 AM", title: "Market briefing", desc: "Review overnight market moves, news, and deal flow." },
+      { time: "10:00 AM", title: "Financial modeling", desc: "Build a DCF model for a potential acquisition target." },
+      { time: "12:00 PM", title: "Pitch book prep", desc: "Create slides for a client presentation on strategic alternatives." },
+      { time: "2:00 PM", title: "Due diligence call", desc: "Discuss findings with lawyers and the client's finance team." },
+      { time: "4:00 PM", title: "Comp analysis", desc: "Update comparable company and precedent transaction analyses." },
+      { time: "7:00 PM", title: "VP review", desc: "Incorporate senior feedback and finalize deliverables." }
+    ],
+    coreSkills: ["Financial modeling", "Valuation", "Attention to detail"],
+    otherSkills: ["Excel (advanced)", "PowerPoint", "Accounting", "Capital markets", "M&A process", "Due diligence"],
+    sidebar: { "Degree required": "Yes", "Common majors": "Finance, Econ, Acct.", "Remote availability": "Low", "Work-life balance": "Very demanding", "Travel": "Moderate" },
+    aiOutlook: "AI is already automating parts of financial modeling, data room analysis, and comp table generation. But deal negotiation, client advisory, judgment on deal structure, and reading the room in high-stakes situations are deeply human. Junior tasks will be most impacted; senior relationship-driven roles are well-insulated.",
+    aiTasks: [
+      { task: "Comp table generation", risk: "high" },
+      { task: "Data room review", risk: "high" },
+      { task: "Financial modeling", risk: "med" },
+      { task: "Deal negotiation", risk: "low" },
+      { task: "Client advisory", risk: "low" }
+    ]
+  },
+  "marketing-strategy": {
+    title: "Marketing Strategy",
+    tagline: "Drive growth by understanding markets, positioning brands, and optimizing acquisition channels.",
+    entrySalary: "$65k",
+    midSalary: "$115k",
+    seniorSalary: "$165k+",
+    jobGrowth: "+10%",
+    jobGrowthLabel: "Average",
+    technicalScore: 30,
+    aiAutomation: 45,
+    aiRiskLevel: "med",
+    overview: "Marketing strategists develop go-to-market plans, define brand positioning, optimize acquisition channels, and analyze campaign performance. The role requires a blend of creative thinking and data-driven decision making. You work across teams, agencies, and channels to grow awareness, drive demand, and retain customers.",
+    dayInLife: [
+      { time: "9:00 AM", title: "Performance review", desc: "Analyze campaign dashboards and weekly metrics." },
+      { time: "10:00 AM", title: "Channel planning", desc: "Allocate budget across paid, organic, and email channels." },
+      { time: "11:30 AM", title: "Creative brief", desc: "Write the brief for a new brand campaign with the agency." },
+      { time: "1:00 PM", title: "Content review", desc: "Review blog posts, social copy, and ad creatives." },
+      { time: "2:30 PM", title: "Competitive intel", desc: "Research competitor positioning and messaging changes." },
+      { time: "4:00 PM", title: "Strategy meeting", desc: "Present Q3 growth plan to the CMO." }
+    ],
+    coreSkills: ["Brand strategy", "Data analysis", "Creative direction"],
+    otherSkills: ["Google Analytics", "Paid media (Meta, Google)", "SEO", "Content strategy", "CRM tools", "Market research"],
+    sidebar: { "Degree required": "No (experience matters)", "Common majors": "Marketing, Comms, Business", "Remote availability": "High", "Work-life balance": "Good", "Travel": "Low" },
+    aiOutlook: "AI is transforming marketing through automated ad copy generation, content creation, audience targeting, and performance optimization. However, brand strategy, creative vision, understanding cultural context, and building genuine customer relationships require human judgment. Marketers who leverage AI tools will be far more effective than those replaced by them.",
+    aiTasks: [
+      { task: "Ad copy generation", risk: "high" },
+      { task: "Performance reporting", risk: "high" },
+      { task: "Brand strategy", risk: "low" },
+      { task: "Creative direction", risk: "low" },
+      { task: "Audience segmentation", risk: "med" }
+    ]
+  },
+  "business-analytics": {
+    title: "Business Analytics",
+    tagline: "Turn data into decisions. Help organizations understand performance and find opportunities.",
+    entrySalary: "$70k",
+    midSalary: "$115k",
+    seniorSalary: "$155k+",
+    jobGrowth: "+23%",
+    jobGrowthLabel: "Much faster than average",
+    technicalScore: 60,
+    aiAutomation: 50,
+    aiRiskLevel: "med",
+    overview: "Business analysts bridge the gap between data and decision-making. You build dashboards, analyze trends, create reports, and help leadership understand what the numbers mean for strategy. The role requires SQL proficiency, comfort with BI tools, and the ability to tell a compelling story with data.",
+    dayInLife: [
+      { time: "9:00 AM", title: "Dashboard check", desc: "Review overnight metrics and flag anomalies." },
+      { time: "10:00 AM", title: "SQL queries", desc: "Pull and clean data for a churn analysis request." },
+      { time: "11:30 AM", title: "Stakeholder sync", desc: "Clarify requirements for a new reporting initiative." },
+      { time: "1:00 PM", title: "Visualization", desc: "Build charts in Tableau to present cohort trends." },
+      { time: "2:30 PM", title: "Root cause analysis", desc: "Investigate why conversion rates dropped last week." },
+      { time: "4:00 PM", title: "Recommendation doc", desc: "Write up findings with proposed next steps." }
+    ],
+    coreSkills: ["SQL", "Data visualization", "Business acumen"],
+    otherSkills: ["Tableau / Power BI", "Excel (advanced)", "Python basics", "Statistical analysis", "Stakeholder communication", "Process mapping"],
+    sidebar: { "Degree required": "Preferred", "Common majors": "Business, Econ, Stats", "Remote availability": "High", "Work-life balance": "Good", "Travel": "Minimal" },
+    aiOutlook: "AI can automate many routine analytics tasks like generating dashboards, writing SQL queries, and producing standard reports. The role is shifting toward more interpretive work: asking the right questions, understanding business context, and providing strategic recommendations that require human judgment and organizational knowledge.",
+    aiTasks: [
+      { task: "Standard reporting", risk: "high" },
+      { task: "SQL query writing", risk: "high" },
+      { task: "Dashboard creation", risk: "med" },
+      { task: "Strategic interpretation", risk: "low" },
+      { task: "Stakeholder advising", risk: "low" }
+    ]
+  },
+  "corporate-strategy": {
+    title: "Corporate Strategy",
+    tagline: "Shape the long-term direction of companies from the inside. Think like a CEO.",
+    entrySalary: "$90k",
+    midSalary: "$150k",
+    seniorSalary: "$220k+",
+    jobGrowth: "+8%",
+    jobGrowthLabel: "Average",
+    technicalScore: 35,
+    aiAutomation: 25,
+    aiRiskLevel: "low",
+    overview: "Corporate strategists work within companies (not as external consultants) to evaluate market opportunities, assess competitive positioning, support M&A decisions, and define long-term business direction. The role requires strong analytical frameworks, financial literacy, and the ability to influence senior executives. It's a natural path for ex-consultants or MBA graduates.",
+    dayInLife: [
+      { time: "9:00 AM", title: "Industry scan", desc: "Review market reports and competitor earnings calls." },
+      { time: "10:30 AM", title: "CEO prep", desc: "Draft talking points for board meeting on growth strategy." },
+      { time: "12:00 PM", title: "M&A screening", desc: "Evaluate potential acquisition targets against strategic criteria." },
+      { time: "1:30 PM", title: "Cross-functional meeting", desc: "Align product and finance on new market entry." },
+      { time: "3:00 PM", title: "Scenario modeling", desc: "Build financial scenarios for different strategic options." },
+      { time: "4:30 PM", title: "Strategy memo", desc: "Write a recommendation for expanding into a new region." }
+    ],
+    coreSkills: ["Strategic frameworks", "Financial analysis", "Executive communication"],
+    otherSkills: ["Market sizing", "Competitive intelligence", "M&A evaluation", "Scenario planning", "Board presentations", "Cross-functional leadership"],
+    sidebar: { "Degree required": "Usually (MBA common)", "Common majors": "Business, Econ, Eng.", "Remote availability": "Moderate", "Work-life balance": "Moderate", "Travel": "Low-moderate" },
+    aiOutlook: "AI can speed up competitive research, market analysis, and scenario modeling. But the strategic judgment, organizational context, and executive influence that define this role are deeply human. Corporate strategists who use AI to accelerate research will be more effective, but AI won't replace the need for strategic thinking and leadership.",
+    aiTasks: [
+      { task: "Competitive research", risk: "high" },
+      { task: "Market sizing", risk: "med" },
+      { task: "Executive recommendations", risk: "low" },
+      { task: "Organizational alignment", risk: "low" },
+      { task: "Scenario modeling", risk: "med" }
+    ]
+  },
+  "financial-analysis": {
+    title: "Financial Analysis",
+    tagline: "Forecast, budget, and analyze financial performance to guide business decisions.",
+    entrySalary: "$65k",
+    midSalary: "$105k",
+    seniorSalary: "$150k+",
+    jobGrowth: "+9%",
+    jobGrowthLabel: "Average",
+    technicalScore: 50,
+    aiAutomation: 55,
+    aiRiskLevel: "med",
+    overview: "Financial analysts prepare budgets, forecasts, variance analyses, and financial reports that help organizations allocate resources and plan for the future. The role is foundational in virtually every large company. Strong Excel skills, accounting knowledge, and the ability to synthesize complex data into actionable insights are essential.",
+    dayInLife: [
+      { time: "8:30 AM", title: "Month-end close", desc: "Reconcile accounts and verify financial statements." },
+      { time: "10:00 AM", title: "Variance analysis", desc: "Investigate why actuals differ from budget by department." },
+      { time: "11:30 AM", title: "Forecasting", desc: "Update the rolling 12-month revenue forecast." },
+      { time: "1:00 PM", title: "Business partner meeting", desc: "Walk the ops team through their P&L performance." },
+      { time: "2:30 PM", title: "Model building", desc: "Create a scenario model for a potential headcount expansion." },
+      { time: "4:00 PM", title: "CFO deck", desc: "Prepare financial summary slides for the CFO's weekly review." }
+    ],
+    coreSkills: ["Financial modeling", "Excel (advanced)", "Accounting"],
+    otherSkills: ["ERP systems (SAP, Oracle)", "Forecasting", "Variance analysis", "Budgeting", "Data visualization", "Business partnering"],
+    sidebar: { "Degree required": "Preferred", "Common majors": "Finance, Accounting", "Remote availability": "Moderate", "Work-life balance": "Good (cyclical peaks)", "Travel": "Minimal" },
+    aiOutlook: "Routine financial analysis tasks like report generation, variance explanations, and standard forecasting are increasingly automatable. The role is evolving toward more strategic finance: partnering with business leaders, providing forward-looking insights, and making judgment calls that require deep organizational context.",
+    aiTasks: [
+      { task: "Report generation", risk: "high" },
+      { task: "Variance explanations", risk: "high" },
+      { task: "Standard forecasting", risk: "med" },
+      { task: "Business partnering", risk: "low" },
+      { task: "Strategic planning", risk: "low" }
+    ]
+  },
+  "healthcare-admin": {
+    title: "Healthcare Administration",
+    tagline: "Run the business side of healthcare. Manage operations, policy, and finance in one of the largest industries.",
+    entrySalary: "$60k",
+    midSalary: "$95k",
+    seniorSalary: "$145k+",
+    jobGrowth: "+28%",
+    jobGrowthLabel: "Much faster than average",
+    technicalScore: 20,
+    aiAutomation: 20,
+    aiRiskLevel: "low",
+    overview: "Healthcare administrators manage the operations, finances, staffing, and regulatory compliance of hospitals, clinics, insurance companies, and health systems. The role requires understanding healthcare policy, managing budgets, coordinating across clinical and administrative teams, and navigating a heavily regulated environment. Demand is strong and growing as the population ages.",
+    dayInLife: [
+      { time: "8:00 AM", title: "Operations huddle", desc: "Review patient volume, staffing levels, and facility issues." },
+      { time: "9:30 AM", title: "Budget review", desc: "Analyze department spending against annual targets." },
+      { time: "11:00 AM", title: "Compliance audit", desc: "Review HIPAA compliance documentation and training status." },
+      { time: "1:00 PM", title: "Vendor negotiation", desc: "Meet with a medical supply vendor to renegotiate contract terms." },
+      { time: "2:30 PM", title: "Staff meeting", desc: "Address operational concerns with department managers." },
+      { time: "4:00 PM", title: "Quality metrics", desc: "Review patient satisfaction scores and quality indicators." }
+    ],
+    coreSkills: ["Healthcare operations", "Regulatory knowledge", "Leadership"],
+    otherSkills: ["Budgeting", "HIPAA compliance", "EHR systems", "Staff management", "Policy analysis", "Quality improvement"],
+    sidebar: { "Degree required": "Usually (MHA/MBA)", "Common majors": "Health Admin, Public Health", "Remote availability": "Low", "Work-life balance": "Moderate", "Travel": "Low" },
+    aiOutlook: "AI can help with scheduling optimization, claims processing, and predictive analytics for patient flow. But healthcare administration involves heavy human interaction, regulatory judgment, crisis management, and navigating complex stakeholder relationships that AI cannot replicate. This is one of the most AI-resilient careers.",
+    aiTasks: [
+      { task: "Scheduling optimization", risk: "med" },
+      { task: "Claims processing", risk: "med" },
+      { task: "Staff management", risk: "low" },
+      { task: "Regulatory compliance", risk: "low" },
+      { task: "Stakeholder relations", risk: "low" }
+    ]
+  },
+  "legal-operations": {
+    title: "Legal Operations",
+    tagline: "Optimize how legal teams work. Bridge law, business, and technology.",
+    entrySalary: "$70k",
+    midSalary: "$120k",
+    seniorSalary: "$170k+",
+    jobGrowth: "+14%",
+    jobGrowthLabel: "Faster than average",
+    technicalScore: 30,
+    aiAutomation: 35,
+    aiRiskLevel: "med",
+    overview: "Legal operations professionals manage the business side of legal departments: budgets, technology, vendor management, process improvement, and data analytics. You don't need a law degree, but you need to understand how legal work flows and where efficiency can be gained. The role is growing rapidly as companies look to run legal teams more like strategic business units.",
+    dayInLife: [
+      { time: "9:00 AM", title: "Budget tracking", desc: "Review outside counsel spend and flag overages." },
+      { time: "10:00 AM", title: "Process design", desc: "Map the contract review workflow and identify bottlenecks." },
+      { time: "11:30 AM", title: "Tech evaluation", desc: "Demo a new CLM platform and assess fit." },
+      { time: "1:00 PM", title: "Vendor management", desc: "Negotiate rates with a preferred law firm panel." },
+      { time: "2:30 PM", title: "Reporting", desc: "Build a dashboard for the GC showing matter status and costs." },
+      { time: "4:00 PM", title: "Cross-functional sync", desc: "Meet with procurement to align on contract templates." }
+    ],
+    coreSkills: ["Process optimization", "Vendor management", "Legal technology"],
+    otherSkills: ["Contract lifecycle mgmt.", "Budget management", "Data analytics", "Project management", "Legal knowledge", "Change management"],
+    sidebar: { "Degree required": "No (experience valued)", "Common majors": "Business, Pre-law, Ops", "Remote availability": "High", "Work-life balance": "Good", "Travel": "Low" },
+    aiOutlook: "AI is making significant inroads into contract review, legal research, and document drafting. Legal ops professionals who understand and implement these tools will be in high demand. The strategic, process-oriented, and relationship-management aspects of the role are well-insulated from automation.",
+    aiTasks: [
+      { task: "Contract review (routine)", risk: "high" },
+      { task: "Legal research", risk: "high" },
+      { task: "Process optimization", risk: "low" },
+      { task: "Vendor relationship mgmt.", risk: "low" },
+      { task: "Technology strategy", risk: "low" }
+    ]
   }
+};
 
-  // Intersection Observer for fade-in
-  function observeElements() {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+// ═══════════════ CAREER CHIP LISTS ═══════════════
+const studentCareers = [
+  "product-management", "software-engineering", "data-science", "ux-design",
+  "management-consulting", "investment-banking", "marketing-strategy", "business-analytics"
+];
+const educatorCareers = [
+  "product-management", "software-engineering", "data-science", "ux-design",
+  "management-consulting", "investment-banking", "marketing-strategy", "business-analytics",
+  "corporate-strategy", "financial-analysis", "healthcare-admin", "legal-operations"
+];
 
-    document.querySelectorAll('.fade-in:not(.visible)').forEach(el => observer.observe(el));
-  }
+function renderCareerChips(containerId, careerList) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = careerList.map(key => {
+    const c = careers[key];
+    return `<div class="career-chip" onclick="showCareer('${key}', '${containerId === 'student-careers' ? 'students' : 'educators'}')">
+      <h5>${c.title}</h5>
+      <span class="salary">${c.entrySalary} &ndash; ${c.seniorSalary}</span>
+      <span class="chip-arrow">View deep dive &rarr;</span>
+    </div>`;
+  }).join('');
+}
 
-  // Interactive quiz items
-  document.querySelectorAll('.quiz-item').forEach(item => {
-    item.addEventListener('click', function() {
-      this.parentElement.querySelectorAll('.quiz-item').forEach(i => i.classList.remove('selected'));
-      this.classList.add('selected');
+// ═══════════════ RENDER CAREER PAGE ═══════════════
+let careerBackPage = 'students';
+
+function showCareer(key, backTo) {
+  careerBackPage = backTo || 'students';
+  const c = careers[key];
+  if (!c) return;
+
+  const aiBarClass = c.aiAutomation <= 30 ? 'ai-bar-low' : c.aiAutomation <= 50 ? 'ai-bar-med' : 'ai-bar-high';
+
+  document.getElementById('career-content').innerHTML = `
+    <section class="career-hero">
+      <button class="back-btn" onclick="showPage('${careerBackPage}')">&larr; Back to ${careerBackPage === 'students' ? 'Student' : 'Career Center'} page</button>
+      <div class="section-tag fade-in">Career Deep Dive</div>
+      <h1 class="fade-in">${c.title}</h1>
+      <p class="tagline fade-in">${c.tagline}</p>
+
+      <div class="metrics-row fade-in">
+        <div class="metric-card">
+          <div class="metric-label">Entry Salary</div>
+          <div class="metric-value">${c.entrySalary}</div>
+          <div class="metric-sub">0-2 years experience</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Mid-Career Salary</div>
+          <div class="metric-value">${c.midSalary}</div>
+          <div class="metric-sub">5-10 years experience</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Job Growth (10yr)</div>
+          <div class="metric-value">${c.jobGrowth}</div>
+          <div class="metric-sub">${c.jobGrowthLabel}</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Technical Level</div>
+          <div class="metric-value">${c.technicalScore}<span style="font-size:0.9rem;font-family:Inter,sans-serif;font-weight:400;color:var(--text-tertiary);">/100</span></div>
+          <div class="scale-bar-container">
+            <div class="scale-bar"><div class="scale-bar-fill" style="width: 0%;" data-target="${c.technicalScore}"></div></div>
+            <div class="scale-bar-labels"><span>Non-technical</span><span>Highly technical</span></div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">AI Automation Risk</div>
+          <div class="metric-value">${c.aiAutomation}<span style="font-size:0.9rem;font-family:Inter,sans-serif;font-weight:400;color:var(--text-tertiary);">%</span></div>
+          <div class="scale-bar-container">
+            <div class="scale-bar"><div class="scale-bar-fill ${aiBarClass}" style="width: 0%;" data-target="${c.aiAutomation}"></div></div>
+            <div class="scale-bar-labels"><span>Low risk</span><span>High risk</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Overview -->
+    <section style="background: var(--surface);">
+      <div class="section-inner">
+        <div class="overview-grid">
+          <div class="overview-text fade-in">
+            <h3>What you'll actually do</h3>
+            <p>${c.overview}</p>
+          </div>
+          <div class="overview-sidebar fade-in">
+            <h4>Quick facts</h4>
+            ${Object.entries(c.sidebar).map(([label, value]) =>
+              `<div class="sidebar-item"><span class="label">${label}</span><span class="value">${value}</span></div>`
+            ).join('')}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Day in the Life -->
+    <section>
+      <div class="section-inner">
+        <div class="section-tag fade-in">A Day in the Life</div>
+        <h2 class="section-title fade-in">What a typical day looks like</h2>
+        <p class="section-desc fade-in">A realistic look at how professionals in this role spend their time.</p>
+        <div class="timeline fade-in">
+          ${c.dayInLife.map(item => `
+            <div class="timeline-item">
+              <div class="timeline-time">${item.time}</div>
+              <div class="timeline-content">
+                <h5>${item.title}</h5>
+                <p>${item.desc}</p>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section style="background: var(--surface);">
+      <div class="section-inner">
+        <div class="section-tag fade-in">Skills Required</div>
+        <h2 class="section-title fade-in">What you need to learn</h2>
+        <p class="section-desc fade-in">Core skills are highlighted. Build these first, then expand your toolkit.</p>
+        <div class="skills-pills fade-in">
+          ${c.coreSkills.map(s => `<span class="skill-pill core">${s}</span>`).join('')}
+          ${c.otherSkills.map(s => `<span class="skill-pill">${s}</span>`).join('')}
+        </div>
+      </div>
+    </section>
+
+    <!-- AI Outlook -->
+    <section>
+      <div class="section-inner">
+        <div class="section-tag fade-in">AI &amp; Automation Outlook</div>
+        <h2 class="section-title fade-in">How AI will shape this role</h2>
+        <p class="section-desc fade-in">An honest look at which tasks are automatable and which remain deeply human.</p>
+        <div class="ai-outlook-card fade-in">
+          <h4>Overall automation risk: ${c.aiAutomation}%</h4>
+          <p>${c.aiOutlook}</p>
+          <div class="ai-bar-big"><div class="ai-bar-big-fill ${aiBarClass}" style="width: 0%;" data-target="${c.aiAutomation}"></div></div>
+          <div class="ai-bar-labels"><span>Low risk</span><span>High risk</span></div>
+          <div class="ai-tasks">
+            ${c.aiTasks.map(t => `
+              <div class="ai-task-row">
+                <span class="ai-task-label">${t.task}</span>
+                <span class="ai-task-risk risk-${t.risk}">${t.risk === 'low' ? 'Low risk' : t.risk === 'med' ? 'Moderate' : 'High risk'}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <div class="section-inner">
+        <h2 class="section-title fade-in" style="text-align: center;">Interested in ${c.title}?</h2>
+        <p class="section-desc fade-in" style="text-align: center;">Take the quiz to see how well it matches your profile, or book a coaching session with an industry expert.</p>
+        <div class="fade-in">
+          <a class="cta-btn" href="#">Take the Career Quiz</a>
+          <a class="cta-btn cta-btn-outline" href="#">Book a Coach</a>
+        </div>
+      </div>
+    </section>
+  `;
+
+  showPage('career');
+
+  // Animate bars after render
+  setTimeout(() => {
+    document.querySelectorAll('.scale-bar-fill[data-target], .ai-bar-big-fill[data-target]').forEach(bar => {
+      bar.style.width = bar.dataset.target + '%';
     });
-  });
+  }, 400);
+}
 
-  // Init
-  observeElements();
+// ═══════════════ PAGE NAVIGATION ═══════════════
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(observeElements, 200);
+}
+
+// ═══════════════ FADE-IN OBSERVER ═══════════════
+function observeElements() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.fade-in:not(.visible)').forEach(el => observer.observe(el));
+}
+
+// ═══════════════ QUIZ INTERACTION ═══════════════
+document.querySelectorAll('.quiz-item').forEach(item => {
+  item.addEventListener('click', function() {
+    this.parentElement.querySelectorAll('.quiz-item').forEach(i => i.classList.remove('selected'));
+    this.classList.add('selected');
+  });
+});
+
+// ═══════════════ INIT ═══════════════
+renderCareerChips('student-careers', studentCareers);
+renderCareerChips('educator-careers', educatorCareers);
+observeElements();
 </script>
 
 </body>
